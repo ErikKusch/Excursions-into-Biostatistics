@@ -1,0 +1,234 @@
+---
+title: "Statistical Significance in Biology"
+subtitle: "Conventions, Abstractions, and the Future"
+author: "Erik Kusch"
+date: "18/06/2019"
+fontsize: 10pt
+output: 
+  beamer_presentation: 
+    keep_tex: true # keep latex file that is generated during compilation
+    toc: false # this is added through a later command
+    slide_level: 3 # at how many pound signs (#) to assume slide title level
+    includes:
+      in_header: Style.tex
+classoption: t # change to `handout` to ignore breaks
+---
+  
+```{r setup, include=FALSE}
+options(scipen=1, digits=4)
+knitr::opts_chunk$set(echo = TRUE, message = FALSE, warning = FALSE, cache = TRUE, cache.lazy=TRUE, tidy.opts=list(width.cutoff=50),tidy=TRUE, fig.height=8, digits=4)
+```
+
+<!--- ####### TOC (use this if you want ## headers to be included in the toc)--------------------
+---------------------------------------  --->
+  
+\tableofcontents[subsubsectionstyle=hide]
+
+<!--- ####### DOCUMENT --------------------
+---------------------------------------  --->
+
+# The Reproducibility Crisis
+## What crisis?
+### Irreproducible research
+
+\centering Reproducibility analyses have shown that only a surprisingly small portion of studies can be replicated.  
+\raggedleft \tiny $\sim$ Nuzzo (2015). FOOLING OURSELVES. Nature.
+
+\vspace{.3cm}
+\pause
+\normalsize \raggedright This manifests in:
+\begin{itemize}
+\item Large sample-to-sample variations of the $p$-value \linebreak
+\raggedleft \tiny $\sim$ Halsey et al. (2015). The fickle P value generates irreproducible results. Nature Methods. \normalsize \raggedright
+\pause
+\item Ambiguity in data handling procedures \linebreak
+\raggedleft \tiny $\sim$ Peng \& Leek (2015). P values are just the tip of the iceberg. Nature. \normalsize \raggedright
+\pause
+\item Difficulty in establishing meta-analyses \linebreak
+\raggedleft \tiny $\sim$ Cumming (2014). The New Statistics: Why and How. Psychological Science.\normalsize \raggedright
+\end{itemize}
+
+\vspace{.6cm}
+\pause
+\centering Thus, our studies become **solitary glances behind the curtain**.
+
+
+## Why are we in this crisis?
+### Reasons for the reproducibility crisis
+Some select phenomena that brought us here:
+\vspace{.1cm} \renewcommand{\baselinestretch}{1}
+\normalsize
+\begincols
+  \begincol{.5\linewidth}
+  \pause
+  **Dichotomy of $p$-values**
+  \begin{itemize}
+  \item Arbitrary $.05$ significance cut-off generates a false dichotomy of \textit{'false'} or \textit{'true'} conclusions
+  \item Significant effect are not necessarily biologically relevant
+  \end{itemize}
+  \renewcommand{\baselinestretch}{.7}
+  \raggedleft \tiny $\sim$ Burnham et al. (2011). AIC model selection and multimodel inference in behavioral ecology: Some background, observations, and comparisons. Behavioral Ecology and Sociobiology. \normalsize \raggedright \newline \renewcommand{\baselinestretch}{1}
+  
+  \pause
+  **Peer-review shortcommings**
+  \begin{itemize}
+  \item Reluctancy to make corrections
+  \item No clear guidelines on where to direct criticism towards
+  \item No standard process for data and code access
+  \end{itemize}
+  \renewcommand{\baselinestretch}{.7}
+  \raggedleft \tiny $\sim$ Allison (2016). A tragedy of errors. Nature. \normalsize \raggedright \renewcommand{\baselinestretch}{1}
+  
+  \endcol
+  \begincol{.5\linewidth}
+  \pause
+  **Research integrity**
+  \begin{itemize}
+  \item Research questions often formulated post-hoc leading to \textit{multiple testing} issue
+  \item Sloppy reporting of data handling procedures
+  \item Lack of data and code repository guidelines
+  \item Lack in pre-specification of research
+  \end{itemize}
+  \renewcommand{\baselinestretch}{.7}
+  \raggedleft \tiny $\sim$ Cumming (2014). The New Statistics: Why and How. Psychological Science. \normalsize \raggedright
+  \renewcommand{\baselinestretch}{1}
+  \endcol
+\endcols
+
+# The $p$-Value Conundrum
+## Background
+### What is the $p$-value and why is it isnufficient?
+\centering \textbf{"The $p$-value is the probability of randomly obtaining an effect at least as extreme as the one in your sample data, given the null hypothesis."}
+
+\begincols
+  \begincol{.5\linewidth}
+  \pause
+  **Misconceptions**
+  \begin{itemize}
+  \item The $p$-value is not designed to tell us whether something is strictly true or false
+  \item It is not the probability of the null hypothesis being true
+  \item The size of $p$ does not yield any information about the strength of an observed effect
+  \end{itemize}
+  \endcol
+  \begincol{.5\linewidth}
+  \pause
+  **Mathematical Quirks**
+  \begin{itemize}
+  \item It varies strongly from sample-to-sample (depending on statistical power of the set-up)
+  \item If the sample size is big enough, the $p$value will always be below the $.05$ cut-off, no matter the magnitude of the effect
+  \end{itemize}
+  \endcol
+\endcols
+
+## Alternatives
+### Effect sizes
+\centering \textbf{"A measure of the magnitude of a statistical effect within the data (i.e. values calculated from test statistics)."}\newline
+\raggedleft\tiny $\sim$ Nakagawa \& Cuthill (2007). Effect size, confidence interval and statistical significance: A practical guide for biologists. Biological Reviews.\newline
+
+\vspace{.3cm}
+\normalsize\raggedright 
+\begin{itemize}
+\item \textbf{Intuitive} to interpret and often what we are interested in
+\item Three types for most situations:
+  \begin{itemize}
+  \item $r$ statistics (correlations)
+  \item $d$ statistics (comparisons of values)
+  \item $OR$ (odds ratio) statistics (risk measurements)
+  \end{itemize}
+\item These are \textbf{point estimates}
+\item Need to be reported alongside some information of credibility
+\item These are usually \textit{standardised} thus enabling meta-studies
+\end{itemize}
+\vspace{.3cm}
+\raggedleft \footnotesize In `R`: \url{https://cran.r-project.org/web/packages/compute.es/compute.es.pdf} and \url{https://cran.r-project.org/web/packages/effsize/effsize.pdf}
+
+### Confidence Intervals
+\centering \textbf{"Confidence intervals (CIs) answer the questions: 'How strong is the effect' and 'How accurate is that estimate of the population effect'."}\newline
+\raggedleft\tiny $\sim$ Halsey (2019). The reign of the p-value is over: what alternative analyses could we employ to fill the power vacuum? Biology Letters.\newline
+
+\vspace{.3cm}
+\normalsize\raggedright 
+\begin{itemize}
+\item \textbf{Intuitive} to interpret
+\item Answers the questions we are most interested in
+\item Does not require additional information of statistical certainty
+\item Combines \textbf{point estimates} and \textbf{range estimates}
+\item Removes some of the pressure of the \textit{"file drawer problem"}
+\item Shares the same mathematical framework as the $p$-value calculation
+\item Especially useful in \textbf{data visualisation}
+\end{itemize}
+\vspace{.3cm}
+\raggedleft \footnotesize In `R`, many functions come with in-built ways of establishing CIs.
+
+### Akaike Information Criterion (AIC)
+\centering \textbf{The Akaike Information Criterion (AIC) is a indicator of model fit.}\newline
+\raggedleft\tiny $\sim$ Burnham et al. (2011). AIC model selection and multimodel inference in behavioral ecology: Some background, observations, and comparisons. Behavioral Ecology and Sociobiology.\newline
+
+\vspace{.3cm}
+\normalsize\raggedright 
+\begin{itemize}
+\item Used for \textbf{model selection and comparison}
+\item Lower AICs indicate better model fit
+\item One can establish contrasting models adhering to different hypothesis and identify which model suits the data best
+\item A proper hypothesis selection tool
+\item Model selection often comes with some degree of uncertainty
+\item Can be misused in step-wise model building procedures
+\end{itemize}
+\vspace{.3cm}
+\raggedleft \footnotesize In `R`, most model outputs can be assessed using the `AIC()` function.
+
+### Bayes Factor
+\centering \textbf{" The minimum Bayes factor is simply the exponential of the difference between the log-likelihoods of two competing models."}\newline
+\raggedleft\tiny $\sim$ Goodman (2001). Of P-Values and Bayes: A Modest Proposal. Epidemiology.\newline
+
+\vspace{.3cm}
+\normalsize\raggedright 
+\begin{itemize}
+\item \textbf{Intuitive} to interpret (Bayes Factor of 1/10 means that our study decreased the relative odds of the null hypothesis being true tenfold)
+\item Uses prior information to establish expected likelihoods thus enabling a progression in science
+\end{itemize}
+\vspace{.3cm}
+\raggedleft \footnotesize In `R`: \url{https://cran.r-project.org/web/packages/BayesFactor/BayesFactor.pdf} or direct Bayesian Statistics using JAGS or STAN (for example)
+
+# Finding A Solution
+## Summary
+### Research Integrity
+\vspace{.3cm}
+\begin{enumerate}
+\item Distinguish between \textbf{prespecified} (answering a question) and \textbf{exploratory} (formulating a question) studies.
+\vspace{.1cm}
+\item Express \textbf{research question in terms of expectations} of effect sizes
+\vspace{.1cm}
+\item Identify the \textbf{effect sizes best suited to answer} these \textbf{questions}
+\vspace{.1cm}
+\item \textbf{Report full study plan before commencing data collection}
+\vspace{.1cm}
+\item \textbf{Calculate measures} of statistical meaning that \textbf{enable meta-studies} (e.g. effect sizes and CIs)
+\vspace{.1cm}
+\item Make sure to \textbf{correctly interpret the results} outside of the $p$-value dichotomy of true and false
+\vspace{.1cm}
+\item \textbf{Report the findings in a meta-analytic context}
+\end{enumerate}
+
+<!-- ### Meta-Analytic Thinking -->
+<!-- \begin{enumerate} -->
+<!-- \item  -->
+<!-- \item  -->
+<!-- \end{enumerate} -->
+
+## Discussion
+### Where do we go from here?
+\begincols
+  \begincol{.5\linewidth}
+  \centering
+  \vspace{0cm}
+  \textit{"Treat statistics as a science, and not a recipe"}\linebreak
+  $\sim$ Andrew Vickers
+  \endcol
+  \begincol{.5\linewidth}
+  \centering
+  \vspace{4cm} \linebreak
+  \textit{"The numbers are where the scientific discussion should start, not end!"}\linebreak
+  $\sim$ Regina Nuzzo
+  \endcol
+\endcols

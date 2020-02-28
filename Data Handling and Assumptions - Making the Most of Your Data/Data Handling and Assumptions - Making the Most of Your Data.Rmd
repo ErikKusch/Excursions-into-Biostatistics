@@ -1,0 +1,52 @@
+---
+title: "Data Handling and Assumptions"
+subtitle: "Making the Most of Your Data"
+author: "Erik Kusch"
+date: "??/??/2020"
+fontsize: 10pt
+output: 
+  beamer_presentation: 
+    keep_tex: true # keep latex file that is generated during compilation
+    toc: false # this is added through a later command
+    slide_level: 3 # at how many pound signs (#) to assume slide title level
+    includes:
+      in_header: Style.tex
+classoption: c # change to `handout` to ignore breaks
+---
+  
+```{r setup, include=FALSE}
+options(scipen=1, digits=4)
+knitr::opts_chunk$set(echo = TRUE, message = FALSE, warning = FALSE, cache = TRUE, cache.lazy=TRUE, tidy.opts=list(width.cutoff=50),tidy=TRUE, fig.height=8, digits=4)
+```
+
+<!--- ####### TOC (use this if you want ## headers to be included in the toc)--------------------
+---------------------------------------  --->
+  
+\tableofcontents
+
+<!--- ####### DOCUMENT --------------------
+---------------------------------------  --->
+
+# Data Etiquettes
+## Data Recording
+### Data Recording
+## Data Storing
+### Data Storing
+## Data Handling
+### Data Handling
+## Data Mining
+### Data Mining
+## Data Sharing
+### Data Sharing
+
+# Statistical Assumptions
+## Normality
+### Normality
+## Independence
+### Independence
+## Homogeneity of Variances
+### Homogeneity of Variances
+
+# Exercise
+## Online Resource
+### Online Resource

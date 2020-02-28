@@ -1,0 +1,249 @@
+---
+title: "Biostatistics"
+subtitle: "... wait. What!?"
+author: "Erik Kusch"
+date: "05/02/2020"
+fontsize: 10pt
+output: 
+  beamer_presentation: 
+    keep_tex: true # keep latex file that is generated during compilation
+    toc: false # this is added through a later command
+    slide_level: 2 # at how many pound signs (#) to assume slide title level
+    includes:
+      in_header: Style.tex
+classoption: c # change to `handout` to ignore breaks
+---
+  
+```{r setup, include=FALSE}
+options(scipen=1, digits=4)
+knitr::opts_chunk$set(echo = TRUE, message = FALSE, warning = FALSE, cache = TRUE, cache.lazy=TRUE, tidy.opts=list(width.cutoff=50),tidy=TRUE, fig.height=8, digits=4)
+```
+
+<!--- ####### DOCUMENT --------------------
+---------------------------------------  --->
+
+# Should you care?
+## The Big Question
+
+\only<1>{
+  \begin{tcolorbox}[colback=burgundy!5,colframe=burgundy!40!black,title= ]
+  \centering Should you care about biostatistics?
+  \end{tcolorbox}
+}
+
+\only<2-3>{
+  \hfill \linebreak
+  
+  \vspace{1.2cm}
+  
+  \centering \Large \textbf{YES!}
+  
+  \vspace{2cm}
+}
+\visible<3>{
+\raggedleft \normalsize Thank you for attending my TED talk.
+}
+
+# Biological Terminology
+\only<1>{
+\begin{center}
+\textbf{No}, biostatistics are \textbf{not just for math nerds}.
+\end{center}
+}
+
+\begincols[T]
+\begincol{.5\linewidth}
+  \centering\includegraphics[width=1\linewidth]{Figures/Meme_Math.jpg}
+\endcol
+\begincol{.5\linewidth}
+\pause
+  Statisticians don't know important \textbf{biological background:}
+  \begin{itemize}
+  \item \textit{Population} vs. \textit{Sample}
+  \item \textit{Species}, \textit{Family}, \textit{Taxon}, etc.
+  \item \textit{Interpretation} of results
+  \end{itemize}
+  \pause
+  \vspace{.2cm}
+  Biologists don't know important \textbf{statistical background:}
+  \begin{itemize}
+  \item \textit{Unsupervised} vs. \textit{Supervised Approaches}
+  \item \textit{Statistical Assumptions}
+  \item \textit{Parametric} vs. \textit{Non-Parametric} Tests
+  \end{itemize}
+\endcol
+\endcols
+
+## Basic Statistics
+\begin{center}
+How often \textbf{do you} actually \textbf{check assumptions}?
+\end{center}
+
+\begincols[T]
+\begincol{.62\linewidth}
+  \pause
+  \begin{itemize}
+  \item \textit{Assumptions}:
+    \begin{itemize}
+    \item Normality
+    \item Independence
+    \item Homogeneity of variances
+    \end{itemize}
+  \end{itemize}
+  \pause $\rightarrow$ Testing? Remedies? 
+  \vspace{.3cm}
+  \pause
+  \begin{itemize}
+  \item \textit{Scales} and \textit{Distributions}:
+    \begin{itemize}
+    \item Continuous, Categorical
+    \item Nominal, Binary, Ordinal, Interval, Relation/Ratio, Integer
+    \item Gaussian Normal, Binomial, Poisson 
+    \end{itemize}
+  \end{itemize} 
+  \pause $\rightarrow$ Distinguish them? 
+\endcol
+\begincol{.38\linewidth}
+\centering \includegraphics[width=0.95\linewidth]{Figures/32163825_601179520254345_7509689345700265984_n.png}
+\includegraphics[width=0.95\linewidth]{Figures/FB_IMG_1508796028117.jpg}
+\endcol
+\endcols
+
+## Correlations
+\begin{center}
+Correlation is \textbf{not} necessarily \textbf{causation}.
+\end{center}
+
+\begincols[T]
+\begincol{.5\linewidth}
+  \pause
+  Correlation tests yield two measurements:
+  \vspace{.2cm}
+  \begin{itemize}
+  \item \textit{r} value (measure of correlation)
+    \begin{itemize}
+    \item $r \approx 1$ (strong, positive correlation)
+    \item $r \approx 0$ (no correlation)
+    \item $r \approx -1$ (strong, negative correlation)
+    \end{itemize}
+  \item \textit{p} value (measure of statistical significance)
+  \end{itemize}
+\endcol
+\begincol{.5\linewidth}
+    \centering \includegraphics[width=.9\linewidth]{Figures/Correl.png}
+\endcol
+\endcols
+\pause
+\vspace{.5cm}
+$\rightarrow$ Get a feeling for it here \url{http://guessthecorrelation.com/}
+
+## Advanced Statistics
+\begincols[T]
+\begincol{.6\linewidth}
+What do you want to \textbf{analyse} and \textbf{predict}?
+\vspace{.5cm}
+\pause
+  \begin{itemize}
+  \item \textit{Classifications}:
+    \begin{itemize}
+    \item K-Means
+    \item Support-Vector Machines
+    \item Hierarchies
+    \item Networks
+    \end{itemize}
+  \end{itemize}
+  \pause $\rightarrow$ When to use which one?
+  \vspace{.3cm}
+  \pause
+  \begin{itemize}
+  \item \textit{Regression}:
+    \begin{itemize}
+    \item Linear Models
+    \item Least Squares vs. Maximum Likelihood
+    \item Mixed Effect Models
+    \item GLS/GLM, and GAM
+    \end{itemize}
+  \end{itemize} 
+  \pause $\rightarrow$ How do you select the best model?
+\endcol
+\begincol{.4\linewidth}
+\centering \includegraphics[width=0.95\linewidth]{Figures/FB_IMG_1505901596401.jpg}
+\endcol
+\endcols
+
+# Issues
+## Statistical Significance - the $p$-value
+\begincols[T]
+\begincol{.6\linewidth}
+\pause
+**Misconceptions**
+  \begin{itemize}
+  \item The $p$-value is not designed to tell us whether something is strictly true or false
+  \item It is not the probability of the null hypothesis being true
+  \item The size of $p$ $\neq$ strength of an observed effect
+  \end{itemize}
+  \vspace{.3cm}
+\pause
+**Alternatives**
+  \begin{itemize}
+  \item Effect Sizes
+  \item Confidence Intervals
+  \item Akaike Information Criterion (AIC)
+  \item Bayes Factor
+  \item Credible Intervals
+  \end{itemize}
+\endcol
+\begincol{.4\linewidth}
+\vspace{.2cm}
+\centering \includegraphics[width=1\linewidth]{Figures/Mirror.jpg}
+\endcol
+\endcols
+
+## Coding Etiquette
+\begincols[T]
+\begincol{.5\linewidth}
+\pause
+**`R` Coding**  
+- Object Modes  
+- Object Types  
+- Sub-setting  
+- Vectorisation  
+- Statements, Loops  
+- Functions, Packages  
+
+\vspace{.3cm}
+\pause
+**Coding Schools**  
+- Hard-coding vs. Soft-coding  
+- Base `plot` vs. `ggplot2`  
+- Base `code` vs. `tidyverse`  
+  \vspace{.3cm}
+\endcol
+\begincol{.5\linewidth}
+\centering \includegraphics[width=0.8\linewidth]{Figures/Meme_Code.jpg} \linebreak
+\pause And what about \textbf{Git Hub}?
+\endcol
+\endcols
+
+## Manuscript Workflow
+Using `Rmarkdown` for your research comes with a multitude of advantages:  \vspace{.3cm}
+
+1. Entire **workflow in one program** (`RStudio`)  
+\vspace{.1cm}
+2. **Research** and reports **reproducible** at the click of **one button**  
+\vspace{.1cm}
+3. **Combines** `R` functionality and \LaTeX \hspace{.04cm} formatting (if desired)  
+\vspace{.1cm}
+4. **Consistent formatting**  
+\vspace{.1cm}
+5. **Clear presentation of code**  
+\vspace{.1cm}
+6. **Dynamic documents** (you can generate various output document types)  
+\vspace{.1cm}
+7. Applicable for **almost all document types** you may desire as an output (e.g. manuscripts, presentations, posters, etc.)  
+
+# Me
+## Need Statistical Advice?
+\centering
+\includegraphics[width=.95\textwidth]{Figures/Erik.png} \linebreak
+\pause \small Find me in room 318, building 1540 (Thursdays, 14.00-17.00) or via \url{erik.kusch@au.dk}.

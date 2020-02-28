@@ -1,0 +1,438 @@
+---
+title: "Rmarkdown - Manuscript Workflow Revisited"
+subtitle: "Using RStudio to Write Theses, Paper, and Presentations"
+author: "Erik Kusch"
+date: "18/06/2019"
+fontsize: 10pt
+output: 
+  beamer_presentation: 
+    keep_tex: true # keep latex file that is generated during compilation
+    toc: false # this is added through a later command
+    slide_level: 3 # at how many pound signs (#) to assume slide title level
+    includes:
+      in_header: Style.tex
+classoption: t # change to `handout` to ignore breaks
+---
+  
+```{r setup, include=FALSE}
+options(scipen=1, digits=4)
+knitr::opts_chunk$set(echo = TRUE, message = FALSE, warning = FALSE, cache = TRUE, cache.lazy=TRUE, tidy.opts=list(width.cutoff=50),tidy=TRUE, fig.height=8, digits=4)
+```
+
+<!--- ####### TOC (use this if you want ## headers to be included in the toc)--------------------
+---------------------------------------  --->
+  
+\tableofcontents[subsubsectionstyle=hide]
+
+<!--- ####### DOCUMENT --------------------
+---------------------------------------  --->
+
+# Introduction
+### What is `Rmarkdown`?
+\begincols
+  \begincol{.5\linewidth}
+  \vspace{-.53cm}
+  \pause
+  **What it is** (*`Rmarkdown`*/*`.Rmd`*) \newline
+  \pause
+  In its **essence**, `Rmarkdown` is a **coding document containing text** that can be used to generate:
+  \begin{itemize}
+  \item Manuscripts
+  \item Presentations
+  \item Posters
+  \item Books
+  \item ...
+  \end{itemize}
+  whilst **maintaining reproducibility** of research. \newline
+  \pause
+  It is *heavily reliant* on the \LaTeX \hspace{.04cm} machinery.
+  \endcol
+  \begincol{.5\linewidth}
+  \pause
+  **What you need** (*Dependencies*) \newline
+  To be able to use the bare minimum of `Rmarkdown`, you need an installation `R` and `RStudio` (These are the *basics*). \newline
+  \pause
+  *Advanced* use of `Rmarkdown` is usually fuelled through \LaTeX \hspace{.04cm} and so you'll need installations of:  
+  \begin{itemize}
+  \item \LaTeX \hspace{.04cm} (for generation of pdf documents)
+  \item JabRef (for referencing)
+  \item Perl (for glossaries)
+  \end{itemize}
+  \endcol
+\endcols
+
+### Why use `Rmarkdown`?
+Using `Rmarkdown` for your research comes with a multitude of advantages:  \vspace{.3cm}
+
+1. Entire **workflow in one program** (`RStudio`)  
+\vspace{.1cm}
+2. **Research** and reports **reproducible** at the click of **one button**  
+\vspace{.1cm}
+3. **Combines** `R` functionality and \LaTeX \hspace{.04cm} formatting (if desired)  
+\vspace{.1cm}
+4. **Consistent formatting**  
+\vspace{.1cm}
+5. **Clear presentation of code**  
+\vspace{.1cm}
+6. **Dynamic documents** (you can generate various output document types)  
+\vspace{.1cm}
+7. Applicable for **almost all document types** you may desire as an output (e.g. manuscripts, presentations, posters, etc.)  
+
+# The Basics
+## Getting Started
+### `Rmarkdown` Worflow
+In the file menu of `RStudio`, click: **File** $\rightarrow$ **New File** $\rightarrow$ **R Markdown**
+\vspace{.1cm}
+\begin{center}
+  \includegraphics[width=0.6\linewidth]{Figures/Open.jpg}
+\end{center}
+\vspace{.1cm}
+Write and edit the document and *compile* by **knitting**.
+
+### `Rmarkdown` Resources
+I cannot cover every aspect of `Rmarkdown` coding in one go. In case you bite, here are resources to help you along:
+\vspace{.2cm}
+\begin{itemize}
+\pause
+  \item \textbf{Guides}
+    \begin{itemize}
+    \item An Introduction: \url{https://rmarkdown.rstudio.com/lesson-1.html}
+    \item The \textit{'Definitive Guide'}: \url{https://bookdown.org/yihui/rmarkdown/}
+    \end{itemize}
+    \vspace{.2cm}
+  \item \textbf{CheatSheets}
+  \pause
+  \begin{itemize}
+    \item Reference Guide: \url{https://www.rstudio.com/wp-content/uploads/2015/03/rmarkdown-reference.pdf}
+    \item Proper CheatSheet: \url{https://www.rstudio.com/wp-content/uploads/2016/03/rmarkdown-cheatsheet-2.0.pdf}
+    \end{itemize}
+\end{itemize}
+\vspace{.2cm}
+\pause
+$\rightarrow$ I recommend learning `Rmarkdown` by inspecting working scripts (including the one used to produce this presentation). You can find some on my github: \url{https://github.com/ErikKusch}.
+
+## `Rmarkdown` Document Structure
+### Overview
+`Rmarkdown` files usually come down to \textbf{three main components}:
+\vspace{.3cm}
+\begin{enumerate}
+\pause
+\item The \textit{YAML Header} - This sets up important characteristics of your document such as:
+  \begin{itemize}
+  \item Title, Subtitle
+  \item Author and Date
+  \item Output File Type
+  \item Document Class and Packages (if output type is \LaTeX \hspace{.04cm} dependant)
+  \end{itemize}
+\vspace{.15cm}
+\pause
+\item \textit{Plain Text} - This is where you write the text of your document. \LaTeX \hspace{.04cm} formatting is supported when the YAML Header indicates a \LaTeX \hspace{.04cm} dependant output file type.
+\vspace{.15cm}
+\pause
+\item \textit{Code Chunks} - Here, you will implement R codes (Matlab and Python coding is supported as well) and run your analyses.
+\end{enumerate}
+
+### YAML Header
+
+A non-exhaustive list of YAML specifiers:
+
+YAML | Function
+------------- | -------------
+title | The heading of your work
+subtitle | A subheading for your work
+author | You and co-workers (if applicable)
+date | Date of delivery or presentation
+output | Whether to create html, pdf, or presentation
+includes | Packages and auxiliary files
+documentclass | \LaTeX \hspace{.04cm} document class (if applicable)
+classoption | \LaTeX \hspace{.04cm} document option (if applicable)
+fontsize | Base font size throughout document
+
+
+### Text
+
+**Formatting** can offset the inherently boring nature of plain text and can be done:
+\vspace{.1cm}
+\begin{itemize}
+\item Through base syntax
+\item Through \LaTeX \hspace{.04cm} syntax
+\end{itemize}
+
+\pause
+\vspace{.5cm}
+Text is *hard coded* but results and code outputs can be included through *soft-coding* via **in-line code**.
+
+\pause
+\vspace{.5cm}
+Text can also be supplied via **auxillary files** using the `child` syntax supplied by `Rmarkdown`. This is useful for big documents but makes cross-referencing very complicated.
+
+### Code Chunks
+
+`R` Code chunks are started with \textasciigrave\textasciigrave\textasciigrave\textit{\{r\}} and ended with \textasciigrave\textasciigrave\textasciigrave. Chunks are supplied with optional arguments within the \textit{\{\}} brackets. A non-exhaustive list of **chunk options**:
+
+Option | Function
+---- | -------------
+name | A name for the chunk, these have to be individual
+eval | `TRUE` if code in chunk should be executed
+include | `TRUE` if chunk should be run but not included in final document
+echo | `TRUE` if code will be displayed
+tidy | `TRUE` if code should be displayed according to `tidy` formatting rules
+cache | `TRUE` if cache for chunk is to be stored for faster compilation on repeated knitting
+
+## Functionality
+### In-Line Code
+
+In-line code can be used to display code output alongside plain text. This is done as follows:
+
+```{r inline, tidy = FALSE}
+# establish and R object to reference in-line
+Answer <- 42 
+```
+
+Then, you write \textasciigrave$r$ $Answer$\textasciigrave \hspace{.04cm} and receive the output `r Answer`.\newline 
+
+This is especially useful when wanting to generate reports that may be re-evaluated using different analyses or novel data sets as results may change.
+
+### Figures and `Rmarkdown`
+
+*Using* `Rmarkdown` *for data visualisation* is **extremely useful**:
+\vspace{.2cm}
+\begin{itemize}
+\pause
+\item Figures are generated on each compilation (unless no cache is stored) thus always being up-to-date with the underlying data
+\vspace{.1cm}
+\item Sub figures are established automatically as long as sub captions are supplied
+\vspace{.1cm}
+\item Figures are registered automatically for the table of figures
+\vspace{.1cm}
+\item Figure placement on the page is fixed (no dragging around as in MS Word)
+\vspace{.1cm}
+\item No scaling artefacts
+\vspace{.1cm}
+\item \textbf{Entire workflow can happen in just one document!}
+\end{itemize}
+
+\vspace{.2cm}
+\pause
+
+`Rmarkdown` **can handle all plotting outputs** of `R` coding including `ggplot2` plots.
+
+# Basic `Rmarkdown`
+### Setting Code Up
+Basic options for coding chunks and kitting options should be defined at the beginning of the `Rmarkdown` document:
+
+\scriptsize
+```{r setupshow, eval=FALSE, tidy = FALSE}
+# R options
+options(scipen=1, digits=4) # output options such as rounding digits
+
+# Knitting options
+knitr::opts_chunk$set(echo = TRUE, # show code
+                      message = FALSE, # don't display code messages
+                      warning = FALSE, # don't display code warnings 
+                      cache = TRUE, # establish chaches
+                      cache.lazy=TRUE, # don't check caches on re-run
+                      tidy=TRUE, # format tidy by default
+                      tidy.opts=list(width.cutoff=50), # width cutoff
+                      fig.height=8, digits=4 # default figures sizes
+                      )
+```
+
+\normalsize
+This chunk should usually be set to `include = FALSE` to run the code but not show any of it.
+
+### Text Formatting
+Basic `Rmarkdown` formatting can be used to generate more lively text:
+
+\footnotesize
+Formatting | Result
+-----|-----
+Plain text | Plain text
+\hspace{.01cm} \*italics\* and \_italics\_ | *italics* and _italics_
+\hspace{.01cm} \*\*bold\*\* and \_\_bold\_\_ | **bold** and __bold__
+superscript\^2\^ | superscript^2^
+$\sim\sim$strikethrough$\sim\sim$ | ~~strikethrough~~
+
+\normalsize
+
+A line break in `Rmakrdown` can be achieved by ending a line with two spaces. \newline
+
+\pause
+More advanced text formatting is possible via the \LaTeX \hspace{.04cm} engine. An exhaustive guides for \LaTeX \hspace{.04cm} formatting can be found here (this covers almost all matters \LaTeX \hspace{.04cm}: \url{http://www.rpi.edu/dept/arc/docs/latex/latex-intro.pdf}.
+
+<!-- ### Lists -->
+
+<!-- \begincols -->
+<!--   \begincol{.5\linewidth} -->
+<!--   The `Rmarkdown` way \newline  -->
+<!--   \endcol -->
+<!--   \begincol{.5\linewidth} -->
+<!--   The \LaTeX way \newline  -->
+<!--   \endcol -->
+<!-- \endcols -->
+
+
+### Text Tables
+
+`Rmarkdown` is capable of generating tables through plain text inputs:\newline 
+
+\raggedright
+\texttt{Table Header | Second Header} \linebreak
+\texttt{------------- | -------------}  \linebreak
+\texttt{Table Cell | Cell 2} \linebreak
+\texttt{Cell 3 | Cell 4} \newline
+
+\raggedright
+turns into:
+  
+Table Header | Second Header
+------------- | -------------
+Table Cell | Cell 2
+Cell 3 | Cell 4
+
+
+### Figures
+Figures which aren't generated via `R` but present as files on the hard drive have to be included into the `Rmarkdown` document the \LaTeX \hspace{.04cm} way. \newline 
+
+\pause
+This is done using the \textbf{includegraphics} command in the \textbf{graphicx} package for \LaTeX. The output of this command is sensitive to other environment specifiers such as floats (\textit{centering, raggedright, etc.}). \newline
+
+\pause
+A \LaTeX \hspace{.04cm} \textbf{figure environment} is useful for *including figures* which have been included this way *into the table of figures and make them available for cross-referencing*.
+
+# Advanced `Rmarkdown`
+### `kable` Tables I 
+
+The `kable` functionality in `Rmarkdown` enables us to generate appealing \LaTeX styled tables directly via `R` coding: 
+
+\scriptsize
+```{r kable, results = 'asis', eval = FALSE}
+library(kableExtra)
+tabout <- as.data.frame(matrix(c(1:20), nrow = 5))
+rownames(tabout) <- c("R1", "R2", "R3", "R4", "R5")
+colnames(tabout) <- c("C1", "C2", "C3", "C4")
+kab <- kable(tabout, 
+            booktabs = TRUE,
+            caption = paste("\\textbf{","Short Description", " -} ","Long Description", sep=""),
+            caption.short = "Short Description",
+            escape = FALSE,
+            format = 'latex')
+kab <- add_header_above(kable_input = kab, header = c(" " = 1, "First two columns" = 2, "Last two columns" = 2), bold = TRUE, align = 'c')
+kab <- kable_styling(kab, latex_options = c("hold_position"))
+print(kab)
+```
+\normalsize
+Code chunks which generate `kable` tables need an additional argument: `results = 'asis'`.
+
+### `kable` Tables II
+
+```{r kableshow, ref.label='kable', results = 'asis', echo = FALSE}
+```
+
+\vspace{.5cm}
+
+It is obvious how this way of table generation **enables reproducible research** as this tables can be directly generated from data and analyses outputs.
+
+### `R` Functions
+Complex data analysis and data visualisation often invokes **user-generated `R` functions**. These should be *presented alongside all other results and data*.\newline
+
+\pause
+
+`Rmarkdown` enables this in a three-step process:  
+\vspace{.1cm}
+1. **Write Function** in a chunk with `echo` set to `FALSE` (preferably in preamble)  
+\vspace{.1cm}
+2. **Call Function** into action in another chunk where it is needed  
+\vspace{.1cm}
+3. **Present Function** using another chunk which is set to `eval = FALSE` by calling the chunk option `ref.label='name'`, where `name` represent the name of the chunk established in step 1
+
+# Manuscripts
+### Cross-Referencing
+Cross-referencing is vital for manuscripts writing and easy to implement in `Rmarkdown` when run through \LaTeX:
+\vspace{-.3cm}
+\begincols
+  \begincol{.5\linewidth}
+  \pause
+  
+  **Sections**
+  \begin{itemize}
+  \item Index section by generating a label via the \textit{label} command.
+  \item Call section index via the \textit{ref} command.
+  \end{itemize}
+  \pause
+  **Figures**
+  \begin{itemize}
+  \item Index figure via the \textit{label} command in \LaTeX \hspace{.04cm} environment or chunk option.
+  \item Reference using the \textit{ref} command.
+  \end{itemize}
+  \endcol
+  \begincol{.5\linewidth}
+  \pause
+  **Tables**
+  \begin{itemize}
+  \item Index table via the \textit{label} command in \LaTeX \hspace{.04cm} environment or chunk option.
+  \item Reference using the \textit{ref} command.
+  \end{itemize}
+  \pause
+  **Chunks**
+  \begin{itemize}
+  \item Generate labelling automation using the \textit{floatrow} package for \LaTeX.
+  \item Reference using the \textit{ref} command and name of the chunk in question.
+  \end{itemize}
+  \endcol
+\endcols
+
+### Bibliographies and Glossaries
+Including a bibliography or a glossary is a necessity in manuscript writing:
+\vspace{-.3cm}
+
+\footnotesize
+\begincols
+  \begincol{.5\linewidth}  
+  \pause
+  **Bibliography**
+  \begin{itemize}
+  \item Install JabRef
+  \item Generate .bib bibliography file
+  \item In YAML header or auxiliary .tex file included in YAML header, load \LaTeX \hspace{.04cm} package \textit{natbib}
+  \item Reference using the \textit{cite} command
+  \item Establish bibliography suing the \textit{bibliography command}
+  \end{itemize}
+  \endcol
+  \begincol{.5\linewidth}  
+  \pause
+  **Glossary**
+  \begin{itemize}
+  \item Install Perl
+  \item In YAML header or auxiliary .tex file included in YAML header, load \LaTeX \hspace{.04cm} package \textit{glossaries}
+  \item Establish glossary entries in .tex file or preamble to document file
+  \item Establish glossary at desired location in document using the \textit{printglossary} command
+  \item Use glossary commands in text
+  \item Compiling requires an extra step through your \LaTeX \hspace{.04cm} compiler for glossary to show up
+  \end{itemize}
+  \endcol
+\endcols
+
+# Presentations
+### Beamer
+`Beamer` is the \LaTeX \hspace{.04cm} way of generating presentation slides and comes with a few quirks:
+\vspace{.1cm}
+\pause
+\begin{itemize}
+\item Strong limitations on layout (it is best to chose from pre-established styles)
+\vspace{.1cm}
+\item No animations possible
+\vspace{.1cm}
+\item Stiff and unwieldy positioning of items
+\end{itemize}
+\pause
+\vspace{.1cm}
+These limitations often lead to *headaches when generating the presentations* but **much cleaner looking presentations** with **consistent formatting**.
+
+\pause
+\vspace{.3cm}
+\LaTeX \hspace{.04cm} column environment (used in `Beamer` presentations) do not allow for the evaluation of `Rmarkdown` syntax. 
+\vspace{.1cm}
+This can be circumvented as by defining novel commands for the column environment instead of calling the default \LaTeX\hspace{.04cm} commands.
+
+
