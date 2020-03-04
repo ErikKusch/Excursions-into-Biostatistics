@@ -67,7 +67,7 @@ In an experimental set-up, you rear an ant colony of exactly 10,000 individuals.
 
 ## Test- vs. Training-Data
 ### Test- vs. Training-Data
-This differentiation is only applicable when concerned with \textit{modelling}, which we won't cover in these seminars.
+This differentiation is only applicable when concerned with \textit{modelling}.
 \vspace{0.2cm}
 \begincols[T]
   \begincol{0.5\linewidth}
@@ -98,6 +98,72 @@ This differentiation is only applicable when concerned with \textit{modelling}, 
 \vspace{0.2cm}
 
 \pause \textit{The solution:} Split the available data into two non-overlapping subsets of data (\textbf{Training} and \textbf{Test Data}) and use these separately to build your model and assess its performance.
+
+## Randomness
+### Randomness
+\begin{tcolorbox}[colback=burgundy!5,colframe=burgundy!40!black,title=]
+\centering \textbf{Randomisation} is one of the \textbf{most important} practices in biological studies.
+\end{tcolorbox}
+
+\pause
+
+A \textbf{sampling} procedure is \textbf{random} when any member of the \textit{population} has an equal chance of being selected into the \textit{sample}.
+
+\vspace{0.2cm}
+
+\textit{Training} and \textit{Test Data Sets} are established from the population with the same sense of randomness although there may be exceptions depending on the modelling procedure at hand.
+
+\vspace{0.2cm}
+\begincols[T]
+  \begincol{0.5\linewidth}
+  \pause
+  \textbf{Data collection:} Number all units contained within the set-up and sample those units corresponding to random numbers.
+  \endcol
+  \begincol{0.5\linewidth}
+  \pause
+  \textbf{In R:} Use the `sample()` function to create truly random subsets. Remember to use `set.seed()` to make this step reproducible!
+  \endcol
+\endcols
+
+### Stratified Sampling
+\begin{center}
+When do we break \textit{true} \textbf{randomness}?.
+\end{center}
+
+\vspace{0.2cm}
+
+\pause
+
+When a \textbf{population} can be divided into distinct categories (i.e. \textbf{strata}). These can be regarded as individual sub-populations.
+
+\vspace{0.2cm}
+
+\textbf{Stratified sampling} ensures that all sub-populations are proportionally represented in the final population-sample given their relative size.
+
+\pause
+
+\scriptsize
+\vspace{0.2cm}
+\begincols[T]
+  \begincol{0.2\linewidth}
+```{r stratasetup, echo = FALSE}
+s <- c(rep("A",50),rep("B",35),rep("C",15))
+d <- as.data.frame(table(s))
+```
+```{r stratasetup2}
+d
+```
+  \endcol
+  \begincol{0.8\linewidth}
+```{r strata}
+set.seed(42) # stratified
+table(sample(d$s, replace = TRUE, prob = d$Freq, 100))
+set.seed(42) # non-stratified
+table(sample(d$s, replace = TRUE, 100))
+```
+  \endcol
+\endcols
+
 
 ## Supervised vs. Unsupervised Approaches
 ### Unsupervised Approaches
@@ -150,32 +216,6 @@ Supervised methods are often \textit{informed by unsupervised approaches} and us
 \pause
 \vspace{0.8cm}
 $\rightarrow$ \textbf{Mostly inferential analyses}
-
-## Randomness
-### Randomness
-\begin{tcolorbox}[colback=burgundy!5,colframe=burgundy!40!black,title=]
-\centering \textbf{Randomisation} is one of the \textbf{most important} practices in biological studies.
-\end{tcolorbox}
-
-\pause
-
-A \textbf{sampling} procedure is \textbf{random} when any member of the \textit{population} has an equal chance of being selected into the \textit{sample}.
-
-\vspace{0.2cm}
-
-\textit{Training} and \textit{Test Data Sets} are established from the population with the same sense of randomness although there may be exceptions depending on the modelling procedure at hand.
-
-\vspace{0.2cm}
-\begincols[T]
-  \begincol{0.5\linewidth}
-  \pause
-  \textbf{Data collection:} Number all units contained within the set-up and sample those units corresponding to random numbers.
-  \endcol
-  \begincol{0.5\linewidth}
-  \pause
-  \textbf{In R:} Use the `sample()` function to create truly random subsets. Remember to use `set.seed()` to make this step reproducible!
-  \endcol
-\endcols
 
 # Variables \& Scales
 ## Basics of Variables
