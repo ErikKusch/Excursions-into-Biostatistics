@@ -2,7 +2,7 @@
 title: "Data Handling and Assumptions"
 subtitle: "Making the Most of Your Data"
 author: "Erik Kusch"
-date: "??/??/2020"
+date: "25/03/2020"
 fontsize: 10pt
 output: 
   beamer_presentation: 
@@ -28,25 +28,340 @@ knitr::opts_chunk$set(echo = TRUE, message = FALSE, warning = FALSE, cache = TRU
 ---------------------------------------  --->
 
 # Data Etiquettes
+### Why Care?
+\begin{tcolorbox}[colback=burgundy!5,colframe=burgundy!40!black,title=]
+\centering \textit{Biostatisticians often use 70\% of their time to handle data and just 30\% to actually analyse it.}
+\end{tcolorbox}
+
+\begincols[T]
+  \begincol{.5\linewidth}
+  \pause
+    \textbf{Why care?} 
+    \begin{itemize}
+    \item Proper data collection and data handling ensure accurate results
+    \item Proper data collection cuts down on data handling time
+    \item Proper data handling will make reproducing an analysis much easier
+    \end{itemize}
+  \endcol
+  \begincol{.5\linewidth}
+  \pause
+  \textbf{What to consider?} 
+    \begin{itemize}
+    \item Which data format to use
+    \item What kind of data to record
+    \item How data values are recorded/stored
+    \item What kind of data values are feasible
+    \end{itemize}
+  \endcol
+\endcols
+
 ## Data Recording
 ### Data Recording
+\textbf{Guidelines for data recording:}
+\begin{itemize}
+\pause
+  \item When collecting categorical data, know what values the variables are allowed to take
+\pause
+  \item When collecting continuous data, know which range the variable values can fall into
+\pause
+  \item Make sure everyone involved in data collection is on the same page
+\pause
+  \item Make regular back-ups of your data set
+\end{itemize}
+
+\vspace{.5cm}
+
+\pause
+\textbf{I recommend:}
+\begin{itemize}
+\pause
+  \item Preparing content-aware excel files for data entry
+    \begin{itemize}
+    \pause
+    \item Only allow pre-defined values to be entered
+    \pause
+    \item Need some excel macro writing
+    \end{itemize}
+\pause
+  \item Using a cloud-service featuring version control for data storage
+\end{itemize}
+
+### Common Issues
+\pause
+\textbf{The Decimals}  
+\pause
+Always use a \textit{dot} to indicate decimals.  
+$\rightarrow$ It is the standard in science.
+  
+\pause
+\vspace{.5cm}
+\textbf{To} `NA` \textbf{Or Not To} `NA`\textbf{?}  
+\pause
+\textit{Never enter} `NA` \textit{values manually} into your data.  
+$\rightarrow$ They cause problems in `R`.
+  
+\pause
+\vspace{.5cm}
+\textbf{Redundancy Or Sparsity?}  
+\pause
+\textit{Don't clutter data} with unnecessary data records.  
+$\rightarrow$ Reduces storage space and chances for errors.
+
 ## Data Storing
 ### Data Storing
+`R` works very well with:  
+
+\vspace{.1cm}
+\begin{itemize}
+\item excel files (\textit{.xls, .xlsx, .csv})
+\end{itemize}
+$\rightarrow$ Easiest to handle outside of `R`, most storage-heavy  
+$\rightarrow$ Make sure to provide co-workers with a master file before data collection to avoid cell formatting issues on different computers
+
+\vspace{.1cm}
+\begin{itemize}
+\item text files (\textit{.txt})
+\end{itemize}
+$\rightarrow$ Difficult to handle outside of `R`, easy on storage  
+$\rightarrow$ I advise against using these, formatting issues are far too common
+
+\vspace{.1cm}
+\begin{itemize}
+\item RDS files (\textit{.rds})
+\end{itemize}
+$\rightarrow$ Impossible to handle outside of `R`, easy on storage  
+$\rightarrow$ I **highly** recommend using these for every step of your work past initial data recording
+
+
 ## Data Handling
-### Data Handling
+### Data Structure
+I recommend a structure like the one below with at least two hierarchy levels.  
+\vspace{5pt}
+\pause
+The only files allowed in your first hierarchy level are:
+\begin{itemize}
+\item R master file
+\item Manuscript master file
+\end{itemize}
+
+\centering \includegraphics[width=0.8\linewidth]{Figures/Hierarchy.jpg}
+
+\vspace{-.2cm}
+
+\pause
+Additionally, make sure to \textbf{back-up your project folder frequently} and use \textbf{version control} on it.
+
 ## Data Mining
-### Data Mining
+### The README File
+Using the \textbf{README file}, one can identify what information is contained within the data set and thus decide:  
+\begin{itemize}
+\pause
+\item What type/class a data record should be of
+\pause
+\item Which variables may be redundant
+\pause
+\item Which data records exceed their variable-specific feasible thresholds
+\pause
+\item Where to get comparative data sets from
+\end{itemize}
+\vspace{.5cm}
+\pause
+\textbf{Data Mining} should then focus on:
+\begin{itemize}
+\pause
+\item \textit{Identifying problems} within the data records
+\pause
+\item \textit{Explorative} data analyses
+\end{itemize}
+
+### Mining in `R` - Numbers or Visualisations?
+For data mining, one may wish to enlist the use of Descriptive Statistics \& Data Visualization:
+\vspace{10pt}
+\begincols[T]
+  \begincol{.5\linewidth}
+  \pause
+  \textbf{Descriptive Statistics:}  
+    - `summary()`  
+    - `str()`  
+    - iterative sub-setting and inspection  
+    
+  \endcol
+  \begincol{.5\linewidth}
+  \pause
+  \textbf{Data Visualizations:}  
+    - Histograms (`hist()`)  
+    - Scatter plots (`ggplot2 Package`)  
+    
+  \endcol
+\endcols
+\vspace{20pt}
+\pause
+\centering \textbf{Holistic data mining} is best \textbf{achieved using a combination} of data visualizations tools and parameters of descriptive statistics!
+
 ## Data Sharing
+### Recording Data Collection - The README File
+\textbf{Documenting data recording} is just as important as proper data collection!  
+\vspace{10pt}
+\pause
+To do so, one usually uses a \textbf{README} file containing the following:
+\begin{itemize}
+  \item Project Name and Summary
+  \item Primary contact information
+  \item Your name and title (if you aren't the primary contact)
+  \item Other people working on the project
+  \item Location of data and supporting info
+  \item Organization and naming conventions used for the data
+  \item Any previous work on the project and where its located
+  \item Funding information
+\end{itemize}
+\pause
+\vspace{.5cm}
+\centering This file is always \textbf{saved in conjunction with the actual data set}!
+
 ### Data Sharing
+Open science conduct is essential and you should (read *have to* as a student/employee of Aarhus University) share your data \& coding to ensure **reproducibility** of your work:
+
+\vspace{10pt}
+\begincols[T]
+  \begincol{.5\linewidth}
+  \pause
+  \textbf{Peer-to-Peer:}  
+    - Raw data  
+    - Code  
+    - You may just as well point your peers to public repositories  
+    
+  \endcol
+  \begincol{.5\linewidth}
+  \pause
+  \textbf{Public:}  
+    - Raw data  
+    - Code  
+    - Html visualizations (`shiny`, `mapview`)  
+    - Websites
+    
+  \endcol
+\endcols
+\vspace{20pt}
+\pause
+\textbf{Aarhus Guideline:} Store data on the Ecoinf/Biochange data server. NOT on the computational server. Read more \href{https://medarbejdere.au.dk/en/administration/researchandtalent/responsible-conduct-of-research/policy-for-research-integrity-freedom-of-research-and-responsible-conduct-of-research-at-aarhus-university/}{here}.
+
 
 # Statistical Assumptions
+### Assumptions
+Statistical tests rely on individual \textit{statistical assumptions}. Most prominent:
+\begincols[c]
+  \begincol{.5\linewidth}
+  \begin{itemize}
+  \pause
+  \item \textbf{Normality}: Data follow a normal distribution
+  \pause
+  \item \textbf{Randomness}: Data are truly random
+  \pause
+  \item \textbf{Independence}: Data are independent
+  \pause
+  \item \textbf{Homogeneity of variances}: Data from separate groups have same variance
+  \pause
+  \item \textbf{Linearity}: Data have linear relationship
+  \end{itemize}
+  \endcol
+  \begincol{.5\linewidth}
+  \visible<2->{
+  \centering \includegraphics[width=1\linewidth]{Figures/FB_IMG_1508796028117.jpg}
+  }
+  \endcol
+\endcols
+
 ## Normality
 ### Normality
+\begin{tcolorbox}[colback=burgundy!5,colframe=burgundy!40!black,title=]
+\centering Testing for normality of the data is \textbf{crucial} for certain statistical procedures.
+\end{tcolorbox}
+
+\begincols[T]
+\begincol{.5\linewidth}
+  \visible<2->{\textbf{The Shapiro-Wilks Test In Theory}}
+  \begin{itemize}
+  \visible<3->{
+  \item Base assumption: The data is normally distributed
+  \item If $p$-value $<$ chosen significance level, the data is \textbf{not} normally distributed
+  \item Very sensitive to sample size
+  }
+  \end{itemize}
+\endcol
+\begincol{.5\linewidth}
+  \visible<2->{\textbf{The QQ Plot In Theory}}
+  \begin{itemize}
+  \visible<4->{
+  \item Method for comparing two probability distributions by plotting their quantiles against each other
+  \item If the two distributions being compared are similar, the plot will show the line $y = x$.
+  \item Compare the data distribution to the normal distribution
+  }
+  \end{itemize}
+\endcol
+\endcols
+
 ## Independence
 ### Independence
+\small
+\begincols[T]
+  \begincol{.5\linewidth}
+  \pause
+    \textbf{Theory:}
+    \begin{itemize}
+    \pause
+    \item Even the smallest dependence in your data can turn into heavily biased results (which may be undetectable).
+    \pause
+    \item A dependence is a connection between/within the data.
+    \pause
+    \item The assumption of independence relies on the absence of any connection in your data that haven't been accounted for in your approach (accounting for it is difficult).
+    \end{itemize} 
+\endcol
+\begincol{.5\linewidth}
+  \pause
+    \textbf{Independent data:}
+    \begin{itemize}
+    \pause
+    \item \textit{Between Groups}\\
+    Groups of data records should be pulled from different individuals.
+    \pause
+    \item \textit{Within Groups}\\
+    Data values within the same group are not to influence one another.
+    \pause
+    \item  \textit{Within Individuals}\\
+    Data values recorded for one individual should not influence each other. This is often an issue with repeated measurement approaches.
+    \end{itemize} 
+\endcol
+\endcols
+\vspace{10pt}
+\pause
+\centering $\rightarrow$ Fixing this \textit{after data collection} is \textbf{almost impossible}!
+
 ## Homogeneity of Variances
 ### Homogeneity of Variances
+Particularly important for t-Tests and ANOVAs
 
-# Exercise
-## Online Resource
-### Online Resource
+
+
+\begincols[c]
+  \begincol{.5\linewidth}
+  \pause
+  - **Assumption**: Data from separate groups have same variance  
+  - **Test**: `leveneTest()` in the `car` package.  
+  
+  \endcol
+  \begincol{.5\linewidth}
+  ```{r homogeneity1, echo = FALSE, fig.height = 6}
+  set.seed(42)
+  A <- rnorm(n = 1000, 50, 20)
+  set.seed(42)
+  B <- rnorm(n = 1000, 50, 10)
+  boxplot(A, B)
+  ```
+  \endcol
+\endcols
+
+\footnotesize
+```{r homogeneity2, echo = FALSE}
+library(car)
+leveneTest(y = c(A, B), group = as.factor(rep(c("A","B"), each = 1000)))
+```

@@ -2,7 +2,7 @@
 title: "Coding Practices"
 subtitle: "Life with R"
 author: "Erik Kusch"
-date: "??/??/2020"
+date: "25/03/2020"
 fontsize: 10pt
 output: 
   beamer_presentation: 
@@ -27,29 +27,290 @@ knitr::opts_chunk$set(echo = TRUE, message = FALSE, warning = FALSE, cache = TRU
 <!--- ####### DOCUMENT --------------------
 ---------------------------------------  --->
 
-# Coding in R
+# Quality of Life Improvements
+## Coding in `R`
+### Objects
+
+\begin{center}
+Assign \textbf{recognizable}, \textbf{concise} names to your objects!
+\end{center}
+
+\pause
+\vspace{.4cm}
+
+Let's start with the object `MyData` - this can be anything. Let's assume it is a raster of NDVI values during the year 1982. How do we come up with a better name?
+
+\begincols[T]
+\begincol{.5\linewidth}
+\pause
+  **Specificity** in your naming helps you keep track of your data in your code:  
+  - `NDVI1982`  
+
+\endcol
+\begincol{.5\linewidth}
+\pause
+  **Classes** of objects determine how they get handled. Add them as a suffix:  
+  - `NDVI1982_ras`  
+  
+\endcol
+\endcols
+
+\vspace{.4cm}
+\pause
+The same goes for **loop indicators**! Avoid single-letter indicators and instead use something like `Iter_Years` - an indicator *iterating* (`Iter`) over years.
+
+\vspace{.5cm}
+\pause
+\raggedleft Also, always use $<-$ for assigning objects!
+
+### Quality of Life Improvements
+
+Use **spaces** to improve readability of your code:
+\footnotesize
+```{r Spaces, eval = FALSE}
+paste0("Bad","Spacing") # bad
+paste0("Good", "Spacing") # good
+```
+\normalsize
+\vspace{.3cm}
+
+\pause 
+Insert **line breaks** to improve workflow. I like to break multiple lines of one function call into logical blocks. For example, in `ggplot2`, the first line holds data, the second contains aesthetics, the third adds a layer, and so on.
+
+\vspace{.3cm}
+\pause 
+To avoid side-scrolling, use the automatic **soft-wrap** function in `RStudio`.
+
+\vspace{.3cm}
+\pause 
+Be **consistent** in your coding style. Found a `tidyverse` solution to your problem online but don't use `tidyverse` syntax in the rest of your document? Adapt the solution to be in the same style as the rest of your coding!
+
+
+## Documenting Your Work
+### Comments
+
+\begin{center}
+Don't be overly proud of your coding skills. Comment everything!
+\end{center}
+
+\vspace{.3cm}
+
+  \pause
+  \textbf{Bad comments:}  
+    - ambiguous  
+    - sparse  
+    
+\footnotesize
+```{r CommentsB, eval = FALSE}
+# Data Manipulation
+```
+\normalsize
+
+  \pause
+  \textbf{Good comments:}  
+    - specify (what is the code doing)  
+    - justify (why is it being done)  
+  
+  \footnotesize
+```{r CommentsG, eval = FALSE}
+# Z-Score calculation for comparability
+```  
+\normalsize
+
+\vspace{.3cm}
+\pause
+\begin{tcolorbox}[colback=green!5,colframe=green!40!black,title=]
+\centering Write comments as though you were \textbf{coding for someone else}!
+\end{tcolorbox}
+
+
+### `RMarkdown`
+Using `Rmarkdown` for your research comes with a multitude of advantages:  \vspace{.3cm}
+
+1. Entire **workflow in one program** (`RStudio`)  
+\vspace{.1cm}
+2. Great capabilities to **present code**  
+\vspace{.1cm}
+3. **Research** and reports **reproducible** at the click of **one button**  
+\vspace{.1cm}
+4. **Combines** `R` functionality and \LaTeX \hspace{.04cm} formatting (if desired)  
+\vspace{.1cm}
+5. **Consistent formatting**  
+\vspace{.1cm}
+6. **Clear presentation of code**  
+\vspace{.1cm}
+7. **Dynamic documents** (you can generate various output document types)  
+\vspace{.1cm}
+8. Applicable for **almost all document types** you may desire as an output (e.g. manuscripts, presentations, posters, etc.)  
+
+
+# Code Structure
+### Header
+The **Head** is used as an information statement at the top of your code document that informs the user of the contents, author, and (sometimes) date of the last edit on said document:
+\vspace{.2cm}
+\footnotesize
+```{r Head, eval = FALSE, tidy = FALSE}
+# ################################################# #
+# PROJECT: Project Title
+# CONTENTS: What the code in your file is used for
+# AUTHOR: Who worked on it
+# EDIT: When the last edit was made
+# ################################################# #
+```
+\normalsize
+\pause
+\vspace{.2cm}
+Personally, I don't use the edit argument in my heads. Instead, I rely on *version control*.
+
+### Preamble
+The **Preamble** is where you set up the most important parameters/guidelines for your coding script. Personally, I *highly* recommend to make your first line in the preamble read `rm(list=ls())`.  
+
+This is also where you load **packages**. I recommend doing so as follows:
+\footnotesize
+```{r Packages1, eval = FALSE}
+install.load.package <- function(x) {
+  if(!require(x, character.only = TRUE))
+    install.packages(x, repos='http://cran.us.r-project.org')
+  require(x, character.only = TRUE)}
+```
+\normalsize
+This functions *checks* whether the package is already installed. If it is, it will be *loaded*. If it is not, it will be *installed* from `CRAN` and subsequently loaded.  
+
+You use it for multiple packages like this:
+```{r Packages2, eval = FALSE}
+package_vec <- c("ggplot2", "foreach", "doParallel")
+sapply(package_vec, install.load.package)
+```
+
+### Sections
+
+**Sections** are a powerful tool in `RStudio`! 
+\vspace{.2cm}
+
+\pause
+\begincols[T]
+\begincol{.5\linewidth}
+  They keep your code:  
+- *structured*  
+- *clear*  
+- *easy-to-use*
+\endcol
+\begincol{.5\linewidth}
+\pause
+  They do so by:  
+- *collapsing* code  
+- adding a *table of contents* 
+\endcol
+\endcols
+
+\centering \includegraphics[width=0.8\linewidth]{Figures/Sections.png}
+
+# Sharing Work
 ## Reproducibility
 ### Reproducibility
-- Working directory  
-- set.seed()  
+**Reproducibility** is **paramount** in science.
+\vspace{.2cm}
 
-## Functions
-### Functions
+\pause
+\begincols[T]
+\begincol{.5\linewidth}
+  **Working directories**  
+  It is common to set a base directory at the beginning of your code and refer to sub-directories from there. We can *do better*:  
+  - `getwd()` in a `project` will yield the directory of the `project` file  
+  - the package `here` offers more functions to never have to set a directory path by hand  
+
+\endcol
+\begincol{.5\linewidth}
+\pause
+  **Randomness**  
+  Random processes (e.g. `sample()`, `rnorm()`, etc.) in `R` are always *pseudo-random* (their calculation is based on your computer time). We can make sure the result of a random process is always the same between researchers by using:  
+  - `set.seed()`  
+  
+\endcol
+\endcols
+
+## Functions \& Sourcing
+### Functions \& Sourcing
+*Big projects* lend themselves well to a **multi-coment workflow**:
+\vspace{.2cm}
+
+\pause
+\begincols[T]
+\begincol{.5\linewidth}
+  **Functions**  
+  User-defined functions are a great way of *soft-coding* your analyses to repeat them for different input parameters and I highly recommend doing so all the time. Make sure your functions are:  
+  - internally *consistent*  
+  - *well-documented*  
+  - easy to *understand*  
+  
+\endcol
+\begincol{.5\linewidth}
+\pause
+  **Sourcing**  
+  Splitting your code into multiple documents is a great idea to ensure your project remains *structured* and *easy to handle*. You can use the `source()` function to combine those documents. Keep in mind that you should:  
+  - use *sensible file names*  
+  - *sourced* functions still need to be *called*
+  
+\endcol
+\endcols
+
+# User-Friendliness
 ## Progress Bar
 ### Progress Bar
+A **progress bar** is a great way of keeping you updated on how your code is progressing so far. It is especially useful when your code involves *loops*:
+\vspace{.2cm}
+\footnotesize
+```{r Prog, eval = FALSE, tidy = FALSE}
+Data_vec <- 1:100 # a vector on integers from 1 to 100
+# creating progress bar
+ProgBar <- txtProgressBar(min = 0, max = length(Data_vec), 
+                          style = 3)
+# looping over contents of Data_vec
+for(Iter_ProgBar in 1:length(Data_vec)){
+  setTxtProgressBar(ProgBar, Iter_ProgBar) # updating ProgBar
+} # end of Data_vec loop
+```
+\centering \includegraphics[width=1\linewidth]{Figures/ProgBar.png}
+
 ## Estimators
 ### Estimators
+**Estimators** are a great way to know when to come back to your computer or server and check up on your data, code, and results. They are most useful in *loop* based approaches as they need a baseline for the estimation:
+\vspace{.2cm}
+\tiny
+```{r Est, tidy = FALSE}
+Data_vec <- 1:100 # a vector on integers from 1 to 100
+T_Begin <- Sys.time() # record time
+# looping over contents of Data_vec
+for(Iter_Est in 1:length(Data_vec)){
+  Sys.sleep(.1) # pause for .1 seconds
+  # estimator produced on first iteration
+  if(Iter_Est == 1){
+    T_End <- Sys.time() # record time
+    Duration <- as.numeric(T_End)-as.numeric(T_Begin) # time difference
+    print(paste("Estimated time to finish:", 
+                as.POSIXlt(T_Begin + Duration*length(Data_vec), 
+                           tz = Sys.timezone(location=FALSE))
+                ))
+  } # end of estimator check
+} # end of Data_vec loop
+```
+\vspace{.2cm}
+\raggedleft Yes, I did work on this presentation past midnight.
+
 ## Parallel Processing
 ### Parallel Processing
+Got a big data approach where you carry out the same kind of analysis for many different species or data sets? It's taking forever to complete? **Parallel processing** has your back! By default, `R` only uses one of the cores in your computer or server for processing code. Use this, to make use of all the computational power:
+\footnotesize
+```{r Par, eval = FALSE, tidy = FALSE}
+library(doParallel) # for registering clusters
+library(foreach) # for parallel processing
+Cores <- detectCores() # identify the number of cores in your machine
+cl <- makeCluster(Cores) # create virtual cluster
+registerDoParallel(cl) # register cluster of cores
+# parallel processing
+foreach(Iter_Par = 1:length(Data_vec)) %dopar% {
+  # your function here
+} # end of parallel processing
+stopCluster(cl) # stop cluster
 
-# Online Resources
-## Github
-### Github
-## Stackexchange
-### Stackexchange
-## Guides
-### Guides
-
-# Exercise
-## Online Resource
-### Online Resource
+```
