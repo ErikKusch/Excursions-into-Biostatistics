@@ -61,15 +61,15 @@ The same goes for **loop indicators**! Avoid single-letter indicators and instea
 
 \vspace{.5cm}
 \pause
-\raggedleft Also, always use $<-$ for assigning objects!
+\raggedleft Also, always use `<-` for assigning objects!
 
 ### Quality of Life Improvements
 
 Use **spaces** to improve readability of your code:
 \footnotesize
-```{r Spaces, eval = FALSE}
-paste0("Bad","Spacing") # bad
-paste0("Good", "Spacing") # good
+```{r Spaces, eval = FALSE, tidy = FALSE}
+c(1,2,rep(3,5)) # bad
+c(1, 2, rep(3, 5)) # good
 ```
 \normalsize
 \vspace{.3cm}
@@ -231,7 +231,7 @@ sapply(package_vec, install.load.package)
 
 ## Functions \& Sourcing
 ### Functions \& Sourcing
-*Big projects* lend themselves well to a **multi-coment workflow**:
+*Big projects* lend themselves well to a **multi-document workflow**:
 \vspace{.2cm}
 
 \pause

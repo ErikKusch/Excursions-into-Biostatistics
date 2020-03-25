@@ -111,6 +111,7 @@ $\rightarrow$ Reduces storage space and chances for errors.
 ### Data Storing
 `R` works very well with:  
 
+\pause
 \vspace{.1cm}
 \begin{itemize}
 \item excel files (\textit{.xls, .xlsx, .csv})
@@ -118,6 +119,7 @@ $\rightarrow$ Reduces storage space and chances for errors.
 $\rightarrow$ Easiest to handle outside of `R`, most storage-heavy  
 $\rightarrow$ Make sure to provide co-workers with a master file before data collection to avoid cell formatting issues on different computers
 
+\pause
 \vspace{.1cm}
 \begin{itemize}
 \item text files (\textit{.txt})
@@ -125,6 +127,7 @@ $\rightarrow$ Make sure to provide co-workers with a master file before data col
 $\rightarrow$ Difficult to handle outside of `R`, easy on storage  
 $\rightarrow$ I advise against using these, formatting issues are far too common
 
+\pause
 \vspace{.1cm}
 \begin{itemize}
 \item RDS files (\textit{.rds})
