@@ -94,14 +94,21 @@ Always use a \textit{dot} to indicate decimals.
 $\rightarrow$ It is the standard in science.
   
 \pause
-\vspace{.5cm}
+\vspace{.3cm}
 \textbf{To} `NA` \textbf{Or Not To} `NA`\textbf{?}  
 \pause
 \textit{Never enter} `NA` \textit{values manually} into your data.  
 $\rightarrow$ They cause problems in `R`.
-  
+
 \pause
 \vspace{.5cm}
+\textbf{Entering} `0`\textbf{?}  
+\pause
+If a `0` value \textit{has meaning} in your set-up, \textit{enter] it!  
+$\rightarrow$ Empty cells are interpreted as `NA` by `R`.
+  
+\pause
+\vspace{.3cm}
 \textbf{Redundancy Or Sparsity?}  
 \pause
 \textit{Don't clutter data} with unnecessary data records.  
@@ -197,6 +204,9 @@ For data mining, one may wish to enlist the use of Descriptive Statistics \& Dat
     
   \endcol
 \endcols
+\vspace{20pt}
+\pause
+The `R` package `skimr` offers the function `skim()` to do all of this in one line of code.  
 \vspace{20pt}
 \pause
 \centering \textbf{Holistic data mining} is best \textbf{achieved using a combination} of data visualizations tools and parameters of descriptive statistics!

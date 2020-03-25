@@ -203,7 +203,11 @@ sapply(package_vec, install.load.package)
 \endcol
 \endcols
 
-\centering \includegraphics[width=0.8\linewidth]{Figures/Sections.png}
+\centering \includegraphics[width=0.5\linewidth]{Figures/Sections.png}
+
+\pause
+\raggedright
+$\rightarrow$ It is a good idea to start an empty coding document by **pseudo-coding** your analyses (i.e. writing sections of comments with what you want the code to do and then do the actual coding).
 
 # Sharing Work
 ## Reproducibility
@@ -217,7 +221,8 @@ sapply(package_vec, install.load.package)
   **Working directories**  
   It is common to set a base directory at the beginning of your code and refer to sub-directories from there. We can *do better*:  
   - `getwd()` in a `project` will yield the directory of the `project` file  
-  - the package `here` offers more functions to never have to set a directory path by hand  
+  - the package `here` offers more functions for this  
+  - set paths to files or direcotires using the `file.path()` function to avoid cross-platform differences in folder path syntax  
 
 \endcol
 \begincol{.5\linewidth}
