@@ -287,7 +287,7 @@ At a `Volume` of $0$, `Girth` is predicted to be `r summary(SingleLin_Mod)[["coe
   \centering
   \resizebox{\textwidth}{!}{%
   \begin{tabular}{L{0.2\linewidth}L{0.8\linewidth}}
-    \textit{Purpose:} &  Identify whether and how two variables are related.\\
+    \textit{Purpose:} &  Identify whether and how variables are related.\\
     \pause
     \textit{Assumptions:} & 
       \begin{itemize}
@@ -422,7 +422,7 @@ ggplot(ChickWeight, aes(Time, weight)) +
   \centering
   \resizebox{\textwidth}{!}{%
   \begin{tabular}{L{0.2\linewidth}L{0.8\linewidth}}
-    \textit{Purpose:} &  Identify whether and how two variables are related.\\
+    \textit{Purpose:} &  Identify whether and how variables are related.\\
     \pause
     \textit{Assumptions:} & 
       \begin{itemize}
