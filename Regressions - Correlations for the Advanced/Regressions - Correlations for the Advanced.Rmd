@@ -2,7 +2,7 @@
 title: "Regressions"
 subtitle: "Correlations for the Advanced?"
 author: "Erik Kusch"
-date: "??/??/2020"
+date: "01/04/2020"
 fontsize: 10pt
 output: 
   beamer_presentation: 
@@ -16,7 +16,7 @@ classoption: c # change to `handout` to ignore breaks
   
 ```{r setup, include=FALSE}
 options(scipen=1, digits=4)
-knitr::opts_chunk$set(echo = TRUE, message = FALSE, warning = FALSE, cache = TRUE, cache.lazy=TRUE, tidy.opts=list(width.cutoff=50),tidy=TRUE, fig.height=8, digits=4)
+knitr::opts_chunk$set(echo = TRUE, message = FALSE, warning = FALSE, cache = TRUE, cache.lazy=TRUE, tidy.opts=list(width.cutoff=50),tidy=FALSE, fig.height=8, digits=4)
 ```
 
 <!--- ####### TOC (use this if you want ## headers to be included in the toc)--------------------
@@ -27,30 +27,496 @@ knitr::opts_chunk$set(echo = TRUE, message = FALSE, warning = FALSE, cache = TRU
 <!--- ####### DOCUMENT --------------------
 ---------------------------------------  --->
 
-# Correlations
-## Terminology
+# The Basics
+## Correlation Tests
 ### Terminology
-## Types of Correlations
-### Types of Correlations
+\begin{center}
+Correlation is \textbf{not} necessarily \textbf{causation} (\raggedleft \href{https://tylervigen.com/page?page=1}{spurious correlations}).
+\end{center}
 
-# Linear Models
-## Basics
-### Basics
+\begincols[T]
+\begincol{.5\linewidth}
+  \pause
+  Correlation tests yield two measurements:
+  \begin{itemize}
+  \item \textit{r} value (measure of correlation)
+    \begin{itemize}
+    \item $r \approx 1$ (strong, positive correlation)
+    \item $r \approx 0$ (no correlation)
+    \item $r \approx -1$ (strong, negative correlation)
+    \end{itemize}
+  \item \textit{p} value (measure of statistical significance)
+  \end{itemize}
+\endcol
+\begincol{.5\linewidth}
+\vspace{30pt}
+  \centering \includegraphics[width=.9\linewidth]{Figures/coeffs.png}
+\endcol
+\endcols
+\pause
+\vspace{.5cm}
+\raggedleft $\rightarrow$ Get a feeling for it on \href{http://guessthecorrelation.com/}{Guess The Correlation}.
+
+### Types of Correlations
+\begin{center}
+These approaches are extremely useful in data exploration and for preliminary analyses!
+\end{center}
+
+\begincols[T]
+\begincol{.5\linewidth}
+  \pause
+  Prominent correlation tests include:
+  \begin{itemize}
+  \item Contingency Coefficient
+  \item Kendall's Tau
+  \item Spearman Correlation
+  \item Pearson Correlation
+  \item Cramer's V
+  \item ANalysis Of VAriance (ANOVA)
+  \item ...
+  \end{itemize}
+\endcol
+\begincol{.5\linewidth}
+  \centering \includegraphics[width=.9\linewidth]{Figures/Correl.png}
+\endcol
+\endcols
+
+## Regression Models
+### Terminology
+\begincols
+\begincol{.5\linewidth}
+  \pause
+  \begin{itemize}
+    \item $\alpha$ - The \textbf{Intercept}. The value of $y$ when $x = 0$ (also referred to as $\beta_0$).
+    \item $\beta_i$ - The \textbf{Correlation Coefficient}. The increase in $y$ for a one-unit increase in dependent variable $i$ (usually, $x$ if only one dependent variable).
+    \item $\epsilon$ - The \textbf{Random Error}. The deviation of data points from the regression line. Usually assumed to follow $\epsilon \sim N(0, \sigma^2)$
+  \end{itemize}
+\endcol
+\begincol{.5\linewidth}
+  \centering \includegraphics[width=1\linewidth]{Figures/Regr.png}
+  \raggedleft \tiny Modified after Knut Helge Jensen.
+\endcol
+\endcols
+
+### Assumptions in Theory
+Linear regression models need to be inspected for violations of assumptions after regressing:
+  \begin{itemize}
+    \item \textbf{Residuals vs. Fitted values} \linebreak 
+    Non-linear patterns identify a non-linear relationship between dependent and independent variables.
+    \item \textbf{Normal Q-Q plot} \linebreak
+    Non-normal distribution of residuals shows that the assumption of $\epsilon \sim N(0, \sigma^2)$ is violated.
+    \item \textbf{Scale Location} \linebreak
+    Non-constant variance identifies show that the assumption of homoscedasticity (invoked by least squares fitting).
+    \item \textbf{Residuals vs. Leverage} \linebreak
+    A non-zero trend identifies the presence of influential outliers.
+  \end{itemize}
+  
+### Assumptions in `R`
+\begincols
+\begincol{.45\linewidth}
+  \pause
+  \begin{itemize}
+    \item Simply type `plot(...)` with `...` denoting your regression model.
+    \item You can also target individual plots by writing:
+    \begin{itemize}
+      \item `plot(..., 1)` for Residuals vs. Fitted values
+      \item `plot(..., 2)` for Normal Q-Q plot
+      \item `plot(..., 3)` for Scale Location
+      \item `plot(..., 4)` for Residuals vs. Leverage
+    \end{itemize}
+  \end{itemize}
+\endcol
+\begincol{.55\linewidth}
+  \centering \includegraphics[width=1\linewidth]{Figures/Assumpts.png}
+  \raggedleft \tiny By Knut Helge Jensen.
+\endcol
+\endcols
+
+
+
+### Types of Regressions
+\begin{center}
+Less model variables result in a more interpretable model!
+\end{center}
+
+\vspace{1cm}
+
+\begincols[T]
+\begincol{.5\linewidth}
+  Prominent regression approaches include the following:
+  \pause
+  \begin{itemize}
+  \item \textbf{Single Linear Regression}
+  \item Multiple Linear Regression
+  \item \textbf{Linear Mixed Effect Models}
+  \item \textbf{Generalized Linear Models}
+  \end{itemize}
+\endcol
+\begincol{.5\linewidth}
+  \pause
+  \begin{itemize}
+  \item Polynomial Regressions
+  \item Generalized Additive Models
+  \item Regression Splines
+  \item Smoothing Splines
+  \item Local Regressions
+  \item ...
+  \end{itemize}
+\endcol
+\endcols
+
+
 ## Least Squares vs. Maximum Likelihood
 ### Least Squares vs. Maximum Likelihood
+\begin{center}
+These methods refer to \textbf{parameter estimation}.
+\end{center}
 
-# Mixed Effect Models
-## Basics 
-### Basics 
+\vspace{.3cm}
 
-# GLS/GLM, and GAM
-## Basics
-### Basics
+\begincols[T]
+\begincol{.5\linewidth}
+  \textit{Ordinary Least Squares} (OSL):
+  \begin{itemize}
+  \item Used for most basic linear regressions
+  \item obtain coefficient estimates $\hat{\beta}_{0}$ and $\hat{\beta}_{1}$ such that the linear model fits the available data well — that is, so that $\hat{y}_{i} \approx \hat{\beta}_{0} + \hat{\beta}_{1}x_{i}$ for $i = 1, ..., n$.
+  \end{itemize}
+\endcol
+\begincol{.5\linewidth}
+  \textit{Maximum Likelihood Estimation} (MLE):
+  \begin{itemize}
+  \item Used in logistic regressions and generalized linear models
+  \item estimates for $\beta_{0}$ and $\beta_{1}$ such that the predicted probability $\hat{Pr}(x_{j})$ corresponds to the observed response variable status.
+  \end{itemize}
+\endcol
+\endcols
+
+\vspace{.5cm}
+
+\begincols[T]
+\begincol{.5\linewidth}
+  Minimize:  
+  \tiny
+  \begin{equation}
+  RSS = \sum\limits_{i=1}^n(y_{i} -\hat{y}_{i})^2
+  \end{equation}
+\endcol
+\begincol{.5\linewidth}
+  Maximize:  
+  \tiny
+  \begin{equation}
+  \ell(\beta_{0},\beta_{1}) = \prod\limits_{i:y_{i}=1} Pr(x_{i}) \prod\limits_{i':y_{i'}=1} (1-Pr(x_{i'}))
+  \end{equation}
+\endcol
+\endcols
+with $\hat{y}_{i} = \hat{\beta}_{0} + \hat{\beta}_{1}x_{i}$
+\normalsize
+
+# Methods \& Models
+## Single Linear Regression
+### Purpose & Assumptions
+\textbf{Single linear regression} \flushright `lm()` in base `R`  
+\vspace{-5pt}
+\begin{table}[c]
+  \centering
+  \resizebox{\textwidth}{!}{%
+  \begin{tabular}{L{0.2\linewidth}L{0.8\linewidth}}
+    \textit{Purpose:} &  Identify whether and how two variables are related.\\
+    \pause
+    \textit{Assumptions:} & 
+      \begin{itemize}
+      \item Down to \textit{Study-Design}:
+      \begin{itemize}
+      \item Predictor variable is continuous (ratio or interval scale)
+      \item Response variable is continuous (ratio or interval scale)
+      \item Variable values are \textbf{independent} (not paired)
+      \end{itemize}
+      \item Need for \textit{Post-Hoc Tests}:
+      \begin{itemize}
+      \item Variable values follow \textbf{homoscedasticity} (equal variance across entire data range)
+      \item Residuals follow normal distribution (\textbf{normality})
+      \item Absence of \textbf{influential outliers}
+      \item Response and Predictor are related in a \textbf{linear} fashion
+      \end{itemize}
+      \end{itemize}
+     \\
+  \end{tabular}}
+\end{table}
+
+
+### Example - The Data
+\footnotesize
+```{r SingleLin1}
+# measures of Diameter (labelled as Girth), Height, and Volume of Timber
+data("trees")
+head(trees) 
+```
+\vspace{.5cm}
+\raggedleft $\rightarrow$ Let's see if there is a good regression to be had between *Girth* and *Volume*.
+
+### Example - The Model 
+\footnotesize
+```{r SingleLin2, fig.height= 5}
+SingleLin_Mod <- with(trees, lm(Girth ~ Volume))
+par(mfrow=c(2,2))
+plot(SingleLin_Mod)
+```
+
+### Example - Refining The Model 
+\footnotesize
+```{r SingleLin3, fig.height= 5}
+trees <- trees[-31,] # removing the influential otulier in row 31
+SingleLin_Mod <- with(trees, lm(Girth ~ Volume))
+par(mfrow=c(2,2))
+plot(SingleLin_Mod)
+```
+
+### Example - Model Output
+\tiny
+```{r SingleLin4, fig.height= 5}
+summary(SingleLin_Mod)
+```
+\vspace{.5cm}
+At a `Volume` of $0$, `Girth` is predicted to be `r summary(SingleLin_Mod)[["coefficients"]][1,1]` (of course that doesn't make sense, not only is a volume of $0$ biological nonsense, height also plays a part here for sure). For a one-unit increase in `Volume`, `Girth` is predicted to go up by `r summary(SingleLin_Mod)[["coefficients"]][2,1]` inches (yes, they recorded in inches). Both estimates are statistically significant.
+
+## Mixed Effect Models
+### Purpose & Assumptions
+\textbf{Linear mixed effect model} \flushright `lme()` in base `nlme` package  
+\vspace{-5pt}
+\begin{table}[c]
+  \centering
+  \resizebox{\textwidth}{!}{%
+  \begin{tabular}{L{0.2\linewidth}L{0.8\linewidth}}
+    \textit{Purpose:} &  Identify whether and how two variables are related.\\
+    \pause
+    \textit{Assumptions:} & 
+      \begin{itemize}
+      \item Down to \textit{Study-Design}:
+      \begin{itemize}
+      \item Predictor variable is continuous (ratio or interval scale)
+      \item Response variables are continuous (ratio or interval scale) and/or categorical (metric or ordinal scale)
+      \end{itemize}
+      \item Need for \textit{Post-Hoc Tests}:
+      \begin{itemize}
+      \item Variable values follow \textbf{homoscedasticity} (equal variance across entire data range)
+      \item Residuals follow normal distribution (\textbf{normality})
+      \item Absence of \textbf{influential outliers}
+      \item Response and Predictor are related in a \textbf{linear} fashion
+      \end{itemize}
+      \end{itemize}
+     \\
+  \end{tabular}}
+\end{table}
+
+### Fixed vs. Random Effects
+\begin{center}
+Fixed effects and random effects are also referred to as fixed effect factors and random effect factors.
+\end{center}
+
+\begincols[T]
+\begincol{.5\linewidth}
+  \pause
+  **Fixed Effects**:
+  \pause
+  \begin{itemize}
+  \item Informative factor levels regarding hypothesis. 
+  \item Want to study these levels and their effects.
+  \item Factor levels are deliberate part of the study-design.
+  \item Higher sample size $\neq$ higher number of levels.
+  \end{itemize}
+\endcol
+\begincol{.5\linewidth}
+  \pause
+  **Random Effects**:
+  \pause
+  \begin{itemize}
+  \item Uninformative factor levels regarding hypothesis. 
+  \item Do not want to study these levels and their effects.
+  \item Factor levels are imposed by nature/type of study.
+  \item Usually: higher sample size $=$ higher number of levels.
+  \end{itemize}
+\endcol
+\endcols
+
+\vspace{.3cm}
+\pause
+\raggedleft Usually stored in `R` in `factor` mode/class.
+
+### Example - The Data
+\footnotesize
+```{r MultiLin1}
+# measures of Weight, Diet, Time, and Chicks
+data("ChickWeight")
+head(ChickWeight) 
+```
+\vspace{.5cm}
+\raggedleft $\rightarrow$ Let's see if there is a good regression to be had between *weight* and *Time* while accounting for random effects belonging to *Chick*, and fixed effects of *Diet*.
+
+### Example - The Model 
+\tiny
+```{r MultiLin2a, fig.height= 5}
+library(nlme)
+MultiLin_Base <- lme(weight ~ Time*Diet, # weight as an interaction of time and diet
+                     random = ~+1|Chick, # random effect of Chick
+                     data = ChickWeight)
+```
+We now have our model. However, we know that time is a component and we likely have repeated samples here. In these cases, we need to account for auto-correlation by defining a correlation structure.
+```{r MultiLin2b, fig.height= 5}
+MultiLin_Mod <- lme(weight ~ Time*Diet, random = ~+1|Chick, 
+                    cor=corAR1(), # adding autocorrelation structure since we have repeated measures
+                    data = ChickWeight)
+```
+Let's see which model (basic or the one with auto-correlative structure) performs better:
+```{r MultiLin2c, fig.height= 5}
+anova(MultiLin_Base, MultiLin_Mod) # second model is better
+```
+We clearly prefer the more sophisticated, auto-correlative model and want to see which of its parameters are informative:
+```{r MultiLin2d, fig.height= 5}
+anova(MultiLin_Mod) # all parameters should be kept
+```
+We keep all parameters. Although the inclusion of `Diet` is not significant, the interaction of `Diet` and `Time` is, therefore, both `Time` and `Diet` need to stay irrespective of their significance.
+
+### Example - Assessing the Model
+\tiny
+```{r MultiLin3, fig.height= 5}
+par(mfrow=c(2,2))
+plot(fitted(MultiLin_Mod), resid(MultiLin_Mod)) # values around 0 -> good
+plot(fitted(MultiLin_Mod), ChickWeight$weight) # pattern fuzzy, but linear -> good
+qqnorm(resid(MultiLin_Mod)) # residuals are not normal dsitributed -> bad
+```
+
+### Example - Model Output
+\tiny
+```{r MultiLin4, fig.height= 5}
+summary(MultiLin_Mod)
+```
+
+### Example - Model Output Explained
+Variance between chicks ($0.006581$) than residual variance ($42.46$). This is good!  
+\vspace{.2cm}
+
+A chick is expected to have a `weight`of `r summary(MultiLin_Mod)[["coefficients"]][["fixed"]][1]` at `Time` $= 0$ and `Diet` $= 1$. Per time-step, `weight` is expected to increase by `r summary(MultiLin_Mod)[["coefficients"]][["fixed"]][2]`.
+\vspace{.2cm}
+
+Mean chick `weight` is different to (read: "Diet1 weights are smaller by") `Diet` $=1$ by `r summary(MultiLin_Mod)[["coefficients"]][["fixed"]][3]`, `r summary(MultiLin_Mod)[["coefficients"]][["fixed"]][4]`, and `r summary(MultiLin_Mod)[["coefficients"]][["fixed"]][5]` for `Diet` $=2$, `Diet` $=3$, and `Diet` $=4$ respectively (take note that these differences aren't statistically significant).  
+\vspace{.2cm}
+
+`weight` of chicks increases, on average, increases by `r summary(MultiLin_Mod)[["coefficients"]][["fixed"]][6]` units more per one-unit increase in time when compared to `Diet` $=1$. The same logic applies to `Diet` $=3$, and `Diet` $=4$.
+
+### Example - Model Output Visualised
+\tiny
+```{r Multi5, fig.height = 4.8}
+library(ggplot2)
+ChickWeight$fit <- predict(MultiLin_Mod, level=0)
+ggplot(ChickWeight, aes(Time, weight)) + 
+  geom_jitter(aes(colour=Diet, shape=Diet), width=0.1, size=3) + 
+  theme_bw(base_size=20) + 
+  geom_line(aes(y=fit, lty=Diet))
+```
+
+## Generalised Linear Models
+### Purpose & Assumptions
+\textbf{Generalized Linear Models} \flushright `glm()` in base `R`  
+\vspace{-5pt}
+\begin{table}[c]
+  \centering
+  \resizebox{\textwidth}{!}{%
+  \begin{tabular}{L{0.2\linewidth}L{0.8\linewidth}}
+    \textit{Purpose:} &  Identify whether and how two variables are related.\\
+    \pause
+    \textit{Assumptions:} & 
+      \begin{itemize}
+      \item Down to \textit{Study-Design}:
+      \begin{itemize}
+      \item Variable values are \textbf{independent} (not paired)
+      \end{itemize}
+      \item Need for \textit{Post-Hoc Tests}:
+      \begin{itemize}
+      \item Absence of \textbf{influential outliers}
+      \item Response and Predictor are related in a \textbf{linear} fashion
+      \end{itemize}
+      \end{itemize}
+     \\
+  \end{tabular}}
+\end{table}
+
+$\rightarrow$ Allow for \textbf{non-normal} distributions and \textbf{heteroscedasticity}
+
+### Linear Predictor, Link Function, and Variance Function
+**Components** of a Generalized Linear Model:
+\begin{enumerate}
+\item \textbf{Linear predictor} e.g.: $y_i = \alpha + \beta_1 + x_i$
+\item \textbf{Link function} $g(\hat{y_i}) = y_i$ \linebreak 
+Relationship between predictor value and estimated value.
+\item \textbf{Variance function} $var(y_i)=\phi V_i(\overline{x})$ \linebreak
+Variance depends on predictor mean, dispersion parameter $\phi$ is a constant
+\end{enumerate}
+
+\pause 
+\vspace{.3cm}
+
+Which **combinations** of components do I use?
+\begin{table}[htbp]
+  \centering
+    \begin{tabular}{rrrr}
+    \toprule
+    Error & Link function & Variance function &  Typical type of data \\
+    \midrule
+    normal  & identity  & $1$ (constant) & Textbook examples \\
+    Poisson & $log$   & $var=\overline{x}$ & Count data \\
+    binomial & logit, $log(\overline{x}/(1-\overline{x}))$ & $var=\overline{x}(1-\overline{x})/n$ & Binary data \\
+    \bottomrule
+    \end{tabular}
+\end{table}
+
+### Example - The Data
+\footnotesize
+```{r GeneralLin1}
+data("ChickWeight")
+head(ChickWeight)
+```
+\vspace{.5cm}
+\raggedleft $\rightarrow$ Let's reassess our earlier analysis of chick **weight** as a function of **time** and **diet**. This time, we will forego the random effect of chicks since that would create a generalized linear mixed effect model.
+
+### Example - The Model 
+\footnotesize
+```{r GeneralLin2, fig.height= 5}
+GeneralLin_Mod <- glm(weight ~ Time*Diet, family = poisson, data = ChickWeight)
+par(mfrow=c(2,2))
+plot(GeneralLin_Mod)
+```
+
+### Example - Model Output
+\tiny
+```{r GeneralLin3, fig.height= 5}
+summary(GeneralLin_Mod)
+```
+\vspace{.2cm}
+As you can see, the estimates to earlier have changed drastically. 
+
+### Example - Model Output Explained
+A chick is now expected to have a `weight`of `r summary(GeneralLin_Mod)[["coefficients"]][1,1]` at `Time` $= 0$ and `Diet` $= 1$. Per time-step, `weight` is expected to increase by `r summary(GeneralLin_Mod)[["coefficients"]][2,1]`.
+\vspace{.2cm}
+
+Mean chick `weight` of `Diet` $=1$ is smaller by `r summary(GeneralLin_Mod)[["coefficients"]][3,1]`, `r summary(GeneralLin_Mod)[["coefficients"]][4,1]`, and `r summary(GeneralLin_Mod)[["coefficients"]][5,1]` for `Diet` $=2$, `Diet` $=3$, and `Diet` $=4$ respectively (these differences are now significant).  
+\vspace{.2cm}
+
+`weight` of chicks increases, on average, increases by `r summary(GeneralLin_Mod)[["coefficients"]][6,1]` units more per one-unit increase in time when compared to `Diet` $=1$. The same logic applies to `Diet` $=3$, and `Diet` $=4$.
 
 # Choosing the Right Method
-## Choices, Choices, Choices...
 ### Choices, Choices, Choices...
 
-# Exercise
-## Online Resource
-### Online Resource
+- \textbf{Linear Model} `lm`. When all \textbf{assumptions are met} (i.e.: homoscedasticity, normality, independence).
+
+\vspace{.2cm}
+
+- \textbf{Linear Mixed Effect Model} `lme`. When the assumption of \textbf{independence is violated}.  
+
+\vspace{.2cm}
+
+- \textbf{Generalized Linear Model} `glm`. When the assumptions of \textbf{homoscedasticity} and \textbf{homoscedasticity} are \textbf{violated}.  
+
+\vspace{.2cm}
+
+- \textbf{Generalized Linear Mixed Effect Model} `glmmPQL` from `MASS`, or `glmer` from `lme4`. When the assumptions of \textbf{homoscedasticity}, \textbf{homoscedasticity}, and \textbf{independence} are \textbf{violated}.  
+
