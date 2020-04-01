@@ -472,16 +472,17 @@ Which **combinations** of components do I use?
 ### Example - The Data
 \footnotesize
 ```{r GeneralLin1}
-data("ChickWeight")
-head(ChickWeight)
+library(AER)
+data("PhDPublications")
+head(PhDPublications)
 ```
 \vspace{.5cm}
-\raggedleft $\rightarrow$ Let's reassess our earlier analysis of chick **weight** as a function of **time** and **diet**. This time, we will forego the random effect of chicks since that would create a generalized linear mixed effect model.
+\raggedleft $\rightarrow$ Let's see if we can predict number of *articles* published by a PhD student as a result of their *gender*, *prestige*, and number if *kids*.
 
 ### Example - The Model 
 \tiny
 ```{r GeneralLin2, fig.height= 5}
-GeneralLin_Mod <- glm(weight ~ Time*Diet, family = poisson, data = ChickWeight)
+GeneralLin_Mod <- glm(articles ~ prestige*gender + kids, family = poisson, data = PhDPublications)
 par(mfrow=c(2,2))
 plot(GeneralLin_Mod)
 ```
@@ -491,17 +492,17 @@ plot(GeneralLin_Mod)
 ```{r GeneralLin3, fig.height= 5}
 summary(GeneralLin_Mod)
 ```
-\vspace{.2cm}
-As you can see, the estimates to earlier have changed drastically. 
 
 ### Example - Model Output Explained
-A chick is now expected to have a `weight`of `r summary(GeneralLin_Mod)[["coefficients"]][1,1]` at `Time` $= 0$ and `Diet` $= 1$. Per time-step, `weight` is expected to increase by `r summary(GeneralLin_Mod)[["coefficients"]][2,1]`.
+According to this model, a male PhD student without kids and 0 prestige produces an estimated amount of `r summary(GeneralLin_Mod)[["coefficients"]][1,1]` papers during their PhD studies.  
+
 \vspace{.2cm}
 
-Mean chick `weight` of `Diet` $=1$ is smaller by `r summary(GeneralLin_Mod)[["coefficients"]][3,1]`, `r summary(GeneralLin_Mod)[["coefficients"]][4,1]`, and `r summary(GeneralLin_Mod)[["coefficients"]][5,1]` for `Diet` $=2$, `Diet` $=3$, and `Diet` $=4$ respectively (these differences are now significant).  
+For an increase in prestige by $1$, the number of papers increases by `r summary(GeneralLin_Mod)[["coefficients"]][2,1]` (this is not statistically significant). Unfortunately, being a women brings the average publication number down by `r summary(GeneralLin_Mod)[["coefficients"]][3,1]`. Having kids also has an adverse effect of reducing the publication number by `r summary(GeneralLin_Mod)[["coefficients"]][4,1]` per kid. Lastly, an increase in prestige has more beneficial impacts on female PhD students as it increases their publication number per one-increase in prestige by `r summary(GeneralLin_Mod)[["coefficients"]][5,1]` from the baseline.  
+
 \vspace{.2cm}
 
-`weight` of chicks increases, on average, increases by `r summary(GeneralLin_Mod)[["coefficients"]][6,1]` units more per one-unit increase in time when compared to `Diet` $=1$. The same logic applies to `Diet` $=3$, and `Diet` $=4$.
+Do keep in mind that there are some issues that this model hasn't addressed yet. Especially, something we call **zero-inflation** of our response variable data as well as some predictor variable data.
 
 # Choosing the Right Method
 ### Choices, Choices, Choices...
