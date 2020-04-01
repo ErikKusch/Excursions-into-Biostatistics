@@ -81,21 +81,13 @@ Examples of categorical variables:
 \begin{itemize}
 \pause
 \item Biome Classifications (e.g. "Boreal Forest", "Tundra", etc.)
-\pause
 \item Sex (e.g. "Male", "Female")
-\pause
 \item Hierarchy Position (e.g. "$\alpha$-Individual", "$\beta$-Individual", etc.)
-\pause
 \item Soil Type (e.g. "Sandy", "Mud", "Permafrost", etc.)
-\pause
 \item Leaf Type (e.g. "Compound", "Single Blade", etc.)
-\pause
 \item Sexual Reproductive Stage (e.g. "Juvenile", "Mature", etc.)
-\pause
 \item Species Membership
-\pause
 \item Family Group Membership
-\pause
 \item ...
 \end{itemize}
 
@@ -122,21 +114,13 @@ Examples of categorical variables:
 \begin{itemize}
 \pause
 \item Temperature
-\pause
 \item Precipitation
-\pause
 \item Weight
-\pause
 \item pH
-\pause
 \item Altitude
-\pause
 \item Group Size
-\pause
 \item Vegetation Indices
-\pause
 \item Time
-\pause
 \item ...
 \end{itemize}
 
