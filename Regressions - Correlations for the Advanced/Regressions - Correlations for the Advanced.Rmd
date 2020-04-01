@@ -445,7 +445,7 @@ $\rightarrow$ Allow for \textbf{non-normal} distributions and \textbf{heterosced
 ### Linear Predictor, Link Function, and Variance Function
 **Components** of a Generalized Linear Model:
 \begin{enumerate}
-\item \textbf{Linear predictor} e.g.: $y_i = \alpha + \beta_1 + x_i$
+\item \textbf{Linear predictor} e.g.: $y_i = \alpha + \beta_1 x_i$
 \item \textbf{Link function} $g(\hat{y_i}) = y_i$ \linebreak 
 Relationship between predictor value and estimated value.
 \item \textbf{Variance function} $var(y_i)=\phi V_i(\overline{x})$ \linebreak
@@ -479,7 +479,7 @@ head(ChickWeight)
 \raggedleft $\rightarrow$ Let's reassess our earlier analysis of chick **weight** as a function of **time** and **diet**. This time, we will forego the random effect of chicks since that would create a generalized linear mixed effect model.
 
 ### Example - The Model 
-\footnotesize
+\tiny
 ```{r GeneralLin2, fig.height= 5}
 GeneralLin_Mod <- glm(weight ~ Time*Diet, family = poisson, data = ChickWeight)
 par(mfrow=c(2,2))
@@ -514,9 +514,9 @@ Mean chick `weight` of `Diet` $=1$ is smaller by `r summary(GeneralLin_Mod)[["co
 
 \vspace{.2cm}
 
-- \textbf{Generalized Linear Model} `glm`. When the assumptions of \textbf{homoscedasticity} and \textbf{homoscedasticity} are \textbf{violated}.  
+- \textbf{Generalized Linear Model} `glm`. When the assumptions of \textbf{homoscedasticity} and \textbf{normality} are \textbf{violated}.  
 
 \vspace{.2cm}
 
-- \textbf{Generalized Linear Mixed Effect Model} `glmmPQL` from `MASS`, or `glmer` from `lme4`. When the assumptions of \textbf{homoscedasticity}, \textbf{homoscedasticity}, and \textbf{independence} are \textbf{violated}.  
+- \textbf{Generalized Linear Mixed Effect Model} `glmmPQL` from `MASS`, or `glmer` from `lme4`. When the assumptions of \textbf{homoscedasticity}, \textbf{normality}, and \textbf{independence} are \textbf{violated}.  
 

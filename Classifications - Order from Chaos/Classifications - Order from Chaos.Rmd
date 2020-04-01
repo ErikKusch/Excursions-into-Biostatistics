@@ -177,7 +177,7 @@ Given a variable range, one can establish however many "bins" as one wants. For 
       \begin{itemize}
       \item Absence of \textbf{influential outliers}
       \item Absence of \textbf{multi-collinearity}
-      \item Response Variables and \textbf{log odds} are related in a \textbf{linear fashion}
+      \item Predictor Variables and \textbf{log odds} are related in a \textbf{linear fashion}
       \end{itemize}
       \end{itemize}
      \\
@@ -214,7 +214,8 @@ Clearly, women of a young age in first class had the highest survival rate. How 
 
 \vspace{.3cm}
 
-But how sure can we be of our model accuracy? We can test it by **poredicting** some new data and **validating** our predictions:
+But how sure can we be of our model accuracy? We can test it by **predicting** some new data and **validating** our predictions:
+\tiny
 ```{r Logistic3, fig.height= 5}
 fitted.results <- predict(Logistic_Mod, newdata=test_df, type='response') # predict on test data
 fitted.results <- ifelse(fitted.results > 0.5 , 1, 0) # if predicted survival probability above .5 assume survival
@@ -315,7 +316,7 @@ print(paste('Accuracy',1-misClasificError)) # output
 
 ## Hierarchies
 ### Theory
-\textbf{Hierarchical Clustering} \flushright `hlust()` in base `R` or `rpart()` in `rpart` package and many others
+\textbf{Hierarchical Clustering} \flushright `hclust()` in base `R` or `rpart()` in `rpart` package and many others
 \vspace{-5pt}
 \begin{table}[c]
   \centering
@@ -345,7 +346,6 @@ print(paste('Accuracy',1-misClasificError)) # output
 ```{r H1a}
 data("iris")
 head(iris)
-dist_mat <- dist(iris[, -5])
 ```
 \vspace{.5cm}
 \raggedleft $\rightarrow$ Again, let's see if we can accurately identify the `Species` contained within the data set by clustering according to `Sepal.Length`, `Sepal.Width`, `Petal.Length`, and `Petal.Width`.  \vspace{.2cm}
@@ -374,7 +374,7 @@ clusterCut <- cutree(clusters, 3) # cut tree
 table(clusterCut, iris$Species) # assess fit
 ```
 
-As we can see here, our decision tree has had no issue identifying *setosa* and *virginica* into clusters $1$ and $3$ respectively. However, it is struggling with placing the species *versicolor*.
+As we can see here, our decision tree has had no issue identifying *setosa* and *virginica* into clusters $1$ and $2$ respectively. However, it is struggling with placing the species *versicolor*.
 
 \pause
 \vspace{.2cm}
@@ -399,7 +399,7 @@ text(fit, use.n = TRUE)
 
 ## Random Forests
 ### Theory
-\textbf{Hierarchical Clustering} \flushright `tuneRF()` in `randomForest` package
+\textbf{Random Forests} \flushright `tuneRF()` in `randomForest` package
 \vspace{-5pt}
 \begin{table}[c]
   \centering
@@ -467,7 +467,7 @@ Again, `Petal.Width` and `Petal.Length` alone seem to be almost enough to accura
   \centering
   \resizebox{\textwidth}{!}{%
   \begin{tabular}{L{0.25\linewidth}L{0.75\linewidth}}
-    \textit{Purpose:} &  Identify which variables to use for clustering our data and build a tree.\\
+    \textit{Purpose:} &  Identify compartments which are strongly connected within, but not between each other.\\
     \pause
     \textit{Advantages:} & 
       \begin{itemize}
@@ -489,7 +489,7 @@ Again, `Petal.Width` and `Petal.Length` alone seem to be almost enough to accura
 ### Example - The Data
 \footnotesize
 
-Here, we take a foodweb contained within the `foodwebs`data collection of the `igraphdata` package. We are using the Middle Chesapeake Bay in Summer foodweb (\tiny Hagy, J.D. (2002) Eutrophication, hypoxia and trophic transfer efficiency in Chesa-peake Bay PhD Dissertation, University of Maryland at College Park (USA), 446 pp. \footnotesize).
+Here, we take a foodweb contained within the `foodwebs` data collection of the `igraphdata` package. We are using the Middle Chesapeake Bay in Summer foodweb (\tiny Hagy, J.D. (2002) Eutrophication, hypoxia and trophic transfer efficiency in Chesa-peake Bay PhD Dissertation, University of Maryland at College Park (USA), 446 pp. \footnotesize).
 \vspace{.3cm}
 ```{r N1}
 library(igraph)
