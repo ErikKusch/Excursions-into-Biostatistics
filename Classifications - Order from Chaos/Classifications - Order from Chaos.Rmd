@@ -2,7 +2,7 @@
 title: "Classifications"
 subtitle: "Order from Chaos"
 author: "Erik Kusch"
-date: "??/??/2020"
+date: "01/04/2020"
 fontsize: 10pt
 output: 
   beamer_presentation: 
@@ -16,7 +16,7 @@ classoption: c # change to `handout` to ignore breaks
   
 ```{r setup, include=FALSE}
 options(scipen=1, digits=4)
-knitr::opts_chunk$set(echo = TRUE, message = FALSE, warning = FALSE, cache = TRUE, cache.lazy=TRUE, tidy.opts=list(width.cutoff=50),tidy=TRUE, fig.height=8, digits=4)
+knitr::opts_chunk$set(echo = TRUE, message = FALSE, warning = FALSE, cache = TRUE, cache.lazy=TRUE, tidy.opts=list(width.cutoff=50),tidy=FALSE, fig.height=8, digits=4)
 ```
 
 <!--- ####### TOC (use this if you want ## headers to be included in the toc)--------------------
@@ -28,25 +28,563 @@ knitr::opts_chunk$set(echo = TRUE, message = FALSE, warning = FALSE, cache = TRU
 ---------------------------------------  --->
 
 # Variables
-## Continuous
-### Continuous
-## Categorical
-### Categorical
-## Binning
-### Binning
+### Types of Variables
+Variables can be classed into a multitude of types. The most common classification system knows:
+\vspace{0.6cm}
+\begin{columns}[T]
+  \begin{column}{.5\linewidth}
+  \pause
+    \textbf{Categorical Variables}
+    \begin{itemize}
+    \item also known as \textit{Qualitative Variables}
+    \item Scales can be either:
+      \begin{itemize}
+      \item Nominal
+      \item Ordinal
+      \end{itemize}
+    \end{itemize}
+  \end{column}
+  \begin{column}{.5\linewidth}
+  \pause
+    \textbf{Continuous Variables}
+    \begin{itemize}
+    \item also known as \textit{Quantitative Variables}
+    \item Scales can be either:
+      \begin{itemize}
+      \item Discrete
+      \item Continuous
+      \end{itemize}
+    \end{itemize}
+  \end{column}
+\end{columns}
+
+## Categorical Variables
+### Categorical Variables
+\begin{tcolorbox}[colback=bondiblue!5,colframe=bondiblue!40!black,title=]
+\centering Categorical variables are those variables which \textbf{establish and fall into distinct groups and classes}.
+\end{tcolorbox}
+\pause
+\vspace{0.4cm}
+Categorical variables:
+\begin{itemize}
+\item can take on a finite number of values
+\item assign each unit of the population to one of a finite number of groups
+\item can \textit{sometimes} be ordered
+\end{itemize}
+\pause
+\vspace{0.4cm}
+\textbf{In R}, categorical variables usually come up as object type `factor` or `character`.
+
+### Categorical Variables (Examples)
+Examples of categorical variables:
+\vspace{.5cm}
+\begin{itemize}
+\pause
+\item Biome Classifications (e.g. "Boreal Forest", "Tundra", etc.)
+\pause
+\item Sex (e.g. "Male", "Female")
+\pause
+\item Hierarchy Position (e.g. "$\alpha$-Individual", "$\beta$-Individual", etc.)
+\pause
+\item Soil Type (e.g. "Sandy", "Mud", "Permafrost", etc.)
+\pause
+\item Leaf Type (e.g. "Compound", "Single Blade", etc.)
+\pause
+\item Sexual Reproductive Stage (e.g. "Juvenile", "Mature", etc.)
+\pause
+\item Species Membership
+\pause
+\item Family Group Membership
+\pause
+\item ...
+\end{itemize}
+
+## Continuous Variables
+### Continuous Variables
+\begin{tcolorbox}[colback=bondiblue!5,colframe=bondiblue!40!black,title=]
+\centering Continuous variables are those variables which \textbf{establish a range of possible data values}.
+\end{tcolorbox}
+\pause
+\vspace{0.4cm}
+Continuous variables:
+\begin{itemize}
+\item can take on an infinite number of values
+\item can take on a new value for each unit in the set-up
+\item can \textit{always} be ordered
+\end{itemize}
+\pause
+\vspace{0.4cm}
+\textbf{In R}, continuous variables usually come up as object type `numeric`.
+
+### Continuous Variables (Examples)
+Examples of categorical variables:
+\vspace{.5cm}
+\begin{itemize}
+\pause
+\item Temperature
+\pause
+\item Precipitation
+\pause
+\item Weight
+\pause
+\item pH
+\pause
+\item Altitude
+\pause
+\item Group Size
+\pause
+\item Vegetation Indices
+\pause
+\item Time
+\pause
+\item ...
+\end{itemize}
+
+## Converting Variable Types
+### Binning Variables
+\textit{Continuous variables} can be converted into \textit{categorical variables} via a method called \textbf{binning:}
+
+\vspace{0.1cm}
+
+\pause
+Given a variable range, one can establish however many "bins" as one wants. For example:
+\pause
+\begin{itemize}
+\item Given a temperature range of $271K - 291K$, there may be 4 bins of equal size:
+  \begin{itemize}
+  \item Bin A: $271K \leq X \leq 276K$
+  \item Bin B: $276K < X \leq 281K$
+  \item Bin C: $281K < X \leq 286K$
+  \item Bin D: $286K < X \leq 291K$
+  \end{itemize}
+
+\end{itemize}
+\vspace{0.2cm}
+\pause
+\begin{tcolorbox}[colback=burgundy!5,colframe=burgundy!40!black,title=]
+\centering Whilst a \textbf{continuous variable} can be both \textit{continuous} and \textit{categorical}, a \textbf{categorical variable} can only ever be \textit{categorical}!
+\end{tcolorbox}
+
+### Confusion Of Units
+\begin{center}
+\includegraphics[width=0.5\linewidth]{Figures/Metrics.jpg}  
+\end{center}
 
 # Classifications
-## K-Means
-### K-Means
-## Support-Vector Machines
-### Support-Vector Machines
-## Hierarchies
-### Hierarchies
-## Random Forests
-### Random Forests
-## Networks
-### Networks
+## Logistic Regression
+### Theory
+\textbf{Logistic Regression} \flushright `glm(..., family=binomial(link='logit'))` in base `R`  
+\vspace{-5pt}
+\begin{table}[c]
+  \centering
+  \resizebox{\textwidth}{!}{%
+  \begin{tabular}{L{0.2\linewidth}L{0.8\linewidth}}
+    \textit{Purpose:} &  Understand how certain variables drive distinct outcomes.\\
+    \pause
+    \textit{Assumptions:} & 
+      \begin{itemize}
+      \item Down to \textit{Study-Design}:
+      \begin{itemize}
+      \item Variable values are \textbf{independent} (not paired)
+      \item \textit{Binary logistic regression}: response variable is \textbf{binary}
+      \item \textit{Ordinal logistic regression}: response variable is \textbf{ordinal}
+      \end{itemize}
+      \item Need for \textit{Post-Hoc Tests}:
+      \begin{itemize}
+      \item Absence of \textbf{influential outliers}
+      \item Absence of \textbf{multi-collinearity}
+      \item Response Variables and \textbf{log odds} are related in a \textbf{linear fashion}
+      \end{itemize}
+      \end{itemize}
+     \\
+  \end{tabular}}
+\end{table}
 
-# Exercise
-## Online Resource
-### Online Resource
+
+### Example - The Data
+\footnotesize
+```{r Logistic1}
+library(titanic)
+train_df <- na.omit(titanic_train) # remove NA rows
+# retain first 50 rows for testing
+test_df <- train_df[c(1:50),c(2,3,5,6)] 
+# delete first 50 rows for testing
+train_df <- train_df[c(-1:-50),c(2,3,5,6)] 
+head(train_df)
+```
+\vspace{.5cm}
+\raggedleft $\rightarrow$ Let's see if there is a good explanation for **Survival** (`Survived`) to be had based off of *Passenger class* (`Pclass`), *sex* (`Sex`), and *age* (`Age`). Was it really "Women and children first"?
+
+### Example - The Model
+\tiny
+```{r Logistic2, fig.height= 5}
+Logistic_Mod <- glm(Survived ~., family=binomial(link='logit'), data = train_df)
+summary(Logistic_Mod)
+```
+
+### Example - Explanation \& Prediction
+\footnotesize
+Obviously, the coefficients of our model can't be **explained** the same way as typical regression coefficients since we are interested in survival probabilities between $0$ and $1$. However, we can interpret the **direction** and **strength** of effects as well as their statistical significance at a glance:  
+
+Clearly, women of a young age in first class had the highest survival rate. How do we know this? As class increases (from 1 to 3), survival probability decreases (`r summary(Logistic_Mod)[["coefficients"]][2,1]`). Furthermore, men had, on average, a much lower survival rate than women (`r summary(Logistic_Mod)[["coefficients"]][3,1]`). Lastly, increasing age negatively affected survival chances (`r summary(Logistic_Mod)[["coefficients"]][4,1]`).  
+
+\vspace{.3cm}
+
+But how sure can we be of our model accuracy? We can test it by **poredicting** some new data and **validating** our predictions:
+```{r Logistic3, fig.height= 5}
+fitted.results <- predict(Logistic_Mod, newdata=test_df, type='response') # predict on test data
+fitted.results <- ifelse(fitted.results > 0.5 , 1, 0) # if predicted survival probability above .5 assume survival
+misClasificError <- mean(fitted.results != test_df$Survived) # compare actual data with predictions
+print(paste('Accuracy',1-misClasificError)) # output
+```
+
+<!-- ### Example - Visualisation -->
+<!-- \tiny -->
+<!-- ```{r Logistic5, fig.height= 5} -->
+<!-- Age_Mod <- glm(Survived ~ Age, family=binomial(link='logit'), data = train_df) # build model only for age -->
+<!-- Ages <- seq(from = floor(range(titanic_train$Age, na.rm = TRUE)[1]), # lowest age range -->
+<!--             to = ceiling(range(titanic_train$Age, na.rm = TRUE)[2]), .01) # highest age range  -->
+<!-- plotresults <- predict(Age_Mod, list(Age=Ages), type="response") # predict -->
+<!-- plot(titanic_train$Age, titanic_train$Survived, pch = 16, xlab = "Age", ylab = "Survival") # plot raw data -->
+<!-- lines(Ages, plotresults, col = "red", lwd = 2) # plot predicted trend -->
+<!-- ``` -->
+
+## K-Means
+### Theory
+\textbf{K-Means Clustering} \flushright `Mclust()` in `mclust` package  
+\vspace{-5pt}
+\begin{table}[c]
+  \centering
+  \resizebox{\textwidth}{!}{%
+  \begin{tabular}{L{0.2\linewidth}L{0.8\linewidth}}
+    \textit{Purpose:} &  Identify a number of $k$ clusters in our data.\\
+    \pause
+    \textit{Assumptions:} & 
+      \begin{itemize}
+      \item Variance of the distribution of each variable is spherical
+      \item All variables have the same variance
+      \item Prior probability for all $k$ clusters are the same
+      \end{itemize}
+     \\
+  \end{tabular}}
+\end{table}
+
+
+### Example - The Data
+\footnotesize
+```{r K1}
+data("iris")
+head(iris)
+```
+
+\vspace{.5cm}
+\raggedleft $\rightarrow$ Let's see if we can accurately identify the `Species` contained within the data set by clustering according to `Sepal.Length`, `Sepal.Width`, `Petal.Length`, and `Petal.Width`.  \vspace{.2cm}
+
+\pause
+\raggedright `mclust` is capable of identifying the statistically most appropriate number of clusters for the data set. Here, we decide to limit the number of clusters to the number of species present so we can test how well the prediction went.
+
+### Example - The Model
+\tiny
+```{r K2, fig.height = 5}
+library(mclust)
+Mclust_mod <- Mclust(iris[,-5], # data for the cluster model
+                   G = length(unique(iris[,5]))) # number of species
+plot(Mclust_mod, what = "uncertainty")
+```
+
+### Example - Explanation \& Prediction
+\footnotesize
+K-means clusters can be interpreted to a certain degree. For example, by calling `Mclust_mod[["parameters"]][["mean"]]` we can assess the mean value of each cluster for each variable. These allow for some **biological interpretation**. Personally, I prefer a visualization as seen on the previous slide. Clearly, `Petal.Length`, and `Petal.Width` are extremely good separators for our different clusters with the green and red clusters overlapping a lot in `Sepal.Length` and `Sepal.Width` space.  
+
+\vspace{.3cm}
+
+But how sure can we be of our model accuracy? We can test it by **predicting** the cluster membership and **validating** our predictions against the real data:
+```{r K3}
+Mclust_pred <- predict.Mclust(Mclust_mod, iris[,-5]) # prediction
+# extract predicted species number
+fitted.results <- Mclust_pred$classification 
+# compare actual data with predictions
+misClasificError <- mean(fitted.results != as.numeric(iris$Species)) 
+print(paste('Accuracy',1-misClasificError)) # output
+```
+
+\pause
+\raggedleft \textbf{Attention!} We wouldn't want to do this in a real analysis. There, we would like to split the data in training and test data like we did with the logistic regression example.
+
+<!-- ## Support-Vector Machines -->
+<!-- ### Theory -->
+
+<!-- ### Example - The Data -->
+<!-- ```{r SVM1} -->
+
+<!-- ``` -->
+
+<!-- ### Example - The Model I -->
+<!-- ```{r SVM2} -->
+
+<!-- ``` -->
+
+<!-- ### Example - The Model II -->
+<!-- ```{r SVM3} -->
+
+<!-- ``` -->
+
+## Hierarchies
+### Theory
+\textbf{Hierarchical Clustering} \flushright `hlust()` in base `R` or `rpart()` in `rpart` package and many others
+\vspace{-5pt}
+\begin{table}[c]
+  \centering
+  \resizebox{\textwidth}{!}{%
+  \begin{tabular}{L{0.25\linewidth}L{0.75\linewidth}}
+    \textit{Purpose:} &  Build a decision tree for classification of our data.\\
+    \pause
+    \textit{Advantages:} & 
+      \begin{itemize}
+      \item Very easy to \textbf{explain and interpret}.
+      \item Easy to \textbf{visualize}.
+      \item Easily handle qualitative predictors without the need to create dummy variables.
+      \vspace{-20pt}
+      \end{itemize} \\
+     \textit{Disadvantages:} & 
+      \begin{itemize}
+      \item Very \textbf{sensitive to} the \textbf{choice of linkage}.
+      \item Generally do not have the same level of predictive accuracy as some of the other regression and classification approaches.
+      \item Trees can be very \textbf{non-robust}.
+      \end{itemize}
+     \\
+  \end{tabular}}
+\end{table}
+
+### Example - The Data
+\footnotesize
+```{r H1a}
+data("iris")
+head(iris)
+dist_mat <- dist(iris[, -5])
+```
+\vspace{.5cm}
+\raggedleft $\rightarrow$ Again, let's see if we can accurately identify the `Species` contained within the data set by clustering according to `Sepal.Length`, `Sepal.Width`, `Petal.Length`, and `Petal.Width`.  \vspace{.2cm}
+
+\pause
+\raggedright `hclust()` can only handle distance matrices. We generate one between the numeric components of our data set as seen below.
+```{r H1b}
+dist_mat <- dist(iris[, -5])
+```
+A distance matrix stores information about the dissimilarity of different observations.
+
+### Example - The Model
+\tiny
+```{r H2, fig.height = 5}
+clusters <- hclust(dist_mat)
+plot(clusters)
+abline(h = 3, col = "red")
+```
+
+### Example - Explanation \& Prediction
+\footnotesize
+Obviously, our initial dendrogramm recognizes way more clusters than we are interested in. In fact, it recognizes as many clusters as their are observations. We may wish to cut the tree down to a proper size. We know that we have three species in our data, so we may want to cut the tree at a height of $3$ - not because that's the number of species, but because the tree just so happens to recognize three clusters at that level of decision-making.
+
+```{r H3}
+clusterCut <- cutree(clusters, 3) # cut tree
+table(clusterCut, iris$Species) # assess fit
+```
+
+As we can see here, our decision tree has had no issue identifying *setosa* and *virginica* into clusters $1$ and $3$ respectively. However, it is struggling with placing the species *versicolor*.
+
+\pause
+\vspace{.2cm}
+\raggedleft Note that we did not take into account any special linkages here!
+
+### Example - Decisions
+\footnotesize
+So far we weren't able to tell the actual decision rules of how to cluster our data. Let's do this:  
+\tiny
+```{r H4, fig.height = 3.8}
+library(rpart)
+fit <- rpart(Species ~. , data = iris)
+plot(fit)
+text(fit, use.n = TRUE)
+```
+
+\vspace{-.2cm}
+
+\pause
+\footnotesize
+\raggedleft Despite the slightly awkward plotting, we can tell that our decisions for assigning species membership build on `Petal.Length` and `Petal.Width` in this example (remember the K-mean clustering which showed roughly the same?)!
+
+## Random Forests
+### Theory
+\textbf{Hierarchical Clustering} \flushright `tuneRF()` in `randomForest` package
+\vspace{-5pt}
+\begin{table}[c]
+  \centering
+  \resizebox{\textwidth}{!}{%
+  \begin{tabular}{L{0.25\linewidth}L{0.75\linewidth}}
+    \textit{Purpose:} &  Identify which variables to use for clustering our data and build a tree.\\
+    \pause
+    \textit{Advantages:} & 
+      \begin{itemize}
+      \item Extremely \textbf{powerful}.
+      \item Very \textbf{robust}.
+      \item Easy to \textbf{interpret}.
+      \vspace{-20pt}
+      \end{itemize} \\
+     \textit{Disadvantages:} & 
+      \begin{itemize}
+      \item A \textbf{black box} algorithm.
+      \item \textbf{Computationally expensive}.
+      \end{itemize}
+     \\
+  \end{tabular}}
+\end{table}
+
+### Example - The Data
+\footnotesize
+```{r RF1}
+library(randomForest)
+data("iris")
+head(iris)
+```
+\vspace{.5cm}
+\raggedleft $\rightarrow$ Once more, let's see if we can accurately identify the `Species` contained within the data set by clustering according to `Sepal.Length`, `Sepal.Width`, `Petal.Length`, and `Petal.Width`.
+
+### Example - The Model
+\tiny
+```{r RF2}
+set.seed(42) # set seed because the process is random
+RF_Mod <- tuneRF(x = iris[,-5], # variables which to use for clustering
+                 y = iris[,5], # correct cluster assignment
+                 strata = iris[,5], # consider this for stratified sampling
+                 doBest = TRUE, # run the best overall tree
+                 ntreeTry = 20000, # consider this number of trees
+                 improve = 0.0001, # use an improvement for tuning if this margin is exceeded
+                 trace = FALSE, plot = FALSE)
+RF_Mod
+```
+\footnotesize
+\raggedleft That is one \textbf{stunningly accurate} tree!
+
+### Example - Explanation
+\footnotesize
+Let's see which variables where actually the most useful when making our clustering decisions:  
+```{r RF3, fig.height = 4}
+varImpPlot(RF_Mod)
+```
+
+\pause
+Again, `Petal.Width` and `Petal.Length` alone seem to be almost enough to accurately classify all of our `iris` data in their respective species memberships!
+
+## Networks
+### Theory
+\textbf{Network Clustering} \flushright `cluster_optimal()`, etc. in `igraph` package and many others
+\vspace{-5pt}
+\begin{table}[c]
+  \centering
+  \resizebox{\textwidth}{!}{%
+  \begin{tabular}{L{0.25\linewidth}L{0.75\linewidth}}
+    \textit{Purpose:} &  Identify which variables to use for clustering our data and build a tree.\\
+    \pause
+    \textit{Advantages:} & 
+      \begin{itemize}
+      \item Highly \textbf{flexible} approaches.
+      \item Network analyses \textbf{offer much more} than clustering.
+      \item Allow for clustering of \textbf{very different data} and identification relationships than other approaches.
+      \vspace{-20pt}
+      \end{itemize} \\
+     \textit{Disadvantages:} & 
+      \begin{itemize}
+      \item \textbf{Steep learning curve}.
+      \item Tricky in \textbf{formatting data correctly}.
+      \item Choices can become \textbf{overwhelming}
+      \end{itemize}
+     \\
+  \end{tabular}}
+\end{table}
+
+### Example - The Data
+\footnotesize
+
+Here, we take a foodweb contained within the `foodwebs`data collection of the `igraphdata` package. We are using the Middle Chesapeake Bay in Summer foodweb (\tiny Hagy, J.D. (2002) Eutrophication, hypoxia and trophic transfer efficiency in Chesa-peake Bay PhD Dissertation, University of Maryland at College Park (USA), 446 pp. \footnotesize).
+\vspace{.3cm}
+```{r N1}
+library(igraph)
+library(igraphdata)
+data("foodwebs")
+Foodweb_ig <- foodwebs[[2]]
+```
+\vspace{.5cm}
+\raggedleft $\rightarrow$ Let's see what kind of network-internal clusters we can make out.
+
+### Example - A Directed Network
+\tiny
+\vspace{-.5cm}
+\begincols[T]
+  \begincol{.4\linewidth}
+  \footnotesize
+  \vspace{1cm}
+  A **directed network** is one in which we know which node/vertex is acting one which other node/vertex.  
+  
+  \vspace{.3cm}
+  
+  We identify the clusters as follows:
+  \tiny
+```{r N2, fig.width=7, eval = FALSE}
+Clusters <- cluster_optimal(Foodweb_ig)
+Colours <- Clusters$membership
+Colours <- rainbow(max(Colours))[Colours]
+plot(Foodweb_ig, 
+     vertex.color = Colours,
+     vertex.size = degree(Foodweb_ig)*0.5, 
+     layout=layout.grid, edge.arrow.size=0.001)
+```
+  \footnotesize
+  This identifies sub-networks/clusters by optimizing the modularity score of the overall network (i.e. optimizing connections within vs. between clusters).
+  \endcol
+  \begincol{.6\linewidth}
+```{r N2b, fig.width = 7, echo = FALSE}
+Clusters <- cluster_optimal(Foodweb_ig)
+Colours <- Clusters$membership
+Colours <- rainbow(max(Colours))[Colours]
+plot(Foodweb_ig, 
+     vertex.color = Colours,
+     vertex.size = degree(Foodweb_ig)*0.5, 
+     layout=layout.grid, edge.arrow.size=0.001)
+```
+  \endcol
+\endcols
+
+
+
+<!-- ### Example - An Undirected Network -->
+<!-- \tiny -->
+<!-- \begincols[T] -->
+<!--   \begincol{.4\linewidth} -->
+<!--   An **undirected network** is one in which we don't know which node/vertex is acting one which other node/vertex.   -->
+
+<!--   We identify the clusters as follows (there are more options): -->
+<!-- ```{r N3, fig.width=7, eval = FALSE} -->
+<!-- Foodweb_ig <- as.undirected(Foodweb_ig) -->
+<!-- Clusters <- cluster_fast_greedy(Foodweb_ig) -->
+<!-- Colours <- Clusters$membership -->
+<!-- Colours <- rainbow(max(Colours))[Colours] -->
+<!-- plot(Foodweb_ig,  -->
+<!--      vertex.color = Colours, -->
+<!--      vertex.size = degree(Foodweb_ig)*0.5,  -->
+<!--      layout=layout.grid, edge.arrow.size=0.001) -->
+<!-- ``` -->
+<!--   This identifies sub-networks/clusters by optimizing the modularity score of the overall network (i.e. optimizing connectictions within vs. between clusters). -->
+<!--   \endcol -->
+<!--   \begincol{.6\linewidth} -->
+<!-- ```{r N3b, fig.width=7, echo = FALSE} -->
+<!-- Foodweb_ig <- as.undirected(Foodweb_ig) -->
+<!-- Clusters <- cluster_fast_greedy(Foodweb_ig) -->
+<!-- Colours <- Clusters$membership -->
+<!-- Colours <- rainbow(max(Colours))[Colours] -->
+<!-- plot(Foodweb_ig,  -->
+<!--      vertex.color = Colours, -->
+<!--      vertex.size = degree(Foodweb_ig)*0.5,  -->
+<!--      layout=layout.grid, edge.arrow.size=0.001) -->
+<!-- ``` -->
+<!--   \endcol -->
+<!-- \endcols -->
