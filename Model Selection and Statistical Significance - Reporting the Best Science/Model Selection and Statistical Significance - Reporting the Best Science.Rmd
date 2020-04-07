@@ -2,7 +2,7 @@
 title: "Model Selection and Statistical Significance"
 subtitle: "Reporting the Best Science"
 author: "Erik Kusch"
-date: "??/??/2020"
+date: "08/04/2020"
 fontsize: 10pt
 output: 
   beamer_presentation: 
@@ -26,33 +26,632 @@ knitr::opts_chunk$set(echo = TRUE, message = FALSE, warning = FALSE, cache = TRU
 
 <!--- ####### DOCUMENT --------------------
 ---------------------------------------  --->
-
 # Model Selection
-## $C_p$ AIC, BIC, (adjusted) $R^2$
-### $C_p$ AIC, BIC, (adjusted) $R^2$
-## Backward vs. Forward Selection
-### Backward vs. Forward Selection
-## Ridge Regression vs. the Lasso
-### Ridge Regression vs. the Lasso
+### What? Why? How?
+\begincols[T]
+\begincol{.5\linewidth}
+  \pause
+  \textbf{What} - \textit{Bias-Variance Trade-Off}:
+  \begin{itemize}
+  \item Trade-off between smooth and flexible models:
+    \begin{itemize}
+    \item \textbf{Bias}: \textit{error} that is \textit{introduced by modelling a data/real life problem by a much simpler model}
+    \item \textbf{Variance}: \textit{how much $\hat{f}$ (estimated mapping function of predictors and responses) would change (vary) if the training data set were to be changed}
+    \end{itemize}
+  \pause
+  \item Simple models: High bias, low variance $\rightarrow$ \textbf{under-fitting}
+  \pause
+  \item Complex models: Low bias, high variance $\rightarrow$ \textbf{over-fitting}
+  \end{itemize}
+\endcol
+\begincol{.5\linewidth}
+  \pause
+  \textbf{Why} - to identify \textit{Best Model}  
+  \begin{itemize}
+  \item Finding the optimal trade-off between bias and variance allows for \textit{most reliable} analyses
+  \end{itemize}
+  \vspace{.3cm}
+  \pause
+  \textbf{How} - \textit{Model Selection Criteria}:
+  \begin{itemize}
+  \item (adjusted) $R^2$
+  \item Mallow’s $C_p$
+  \item Akaike Information Criterion (AIC)
+  \item Bayesian Information Criterion (BIC)
+  \item Receiver-Operator Characteristics (ROCs)
+  \item ...
+  \end{itemize}
+\endcol
+\endcols
+
+## (adjusted) $R^2$
+### $R^2$
+\small
+In `R`: \hfill `summary(...)$r.squared` with `...` being a regression object
+\begin{table}[c]
+        \centering
+          \resizebox{\textwidth}{!}{%
+          \begin{tabular}{L{0.2\linewidth}L{0.8\linewidth}}
+           \textit{Definition:} &  Proportion of variation in $Y$ that can be explained by regression using predictor(s) $X$. Values bound between 0 and 1.\\
+           & Does \textbf{not penalize complex models}! \textbf{Large R\textsuperscript{2}} values do \textbf{not necessarily imply a good model}. \\
+           \hline
+           \textbf{\textit{Calculation:}} & 
+           \begin{equation}
+           R\textsuperscript{2} = \frac{TSS-RSS}{TSS} = 1 - \frac{RSS}{TSS} = \frac{\frac{1}{n} (y_{i} - \hat{y}_{i})^2}{\frac{1}{n} (y_{i} - \overline{y}_{i})^2}
+           \end{equation} \\
+           $TSS$  & $\sum(y_{i} − \overline{y})^2$ \\
+           $RSS$  & $\sum\limits_{i=1}^n(y_{i} -\hat{y}_{i})^2$ \\
+           $n$  & Number of samples \\
+          \end{tabular}}
+        \label{Des_Stats}
+\end{table}
+
+\vspace{.2cm}
+\pause
+\raggedleft Also called \textbf{Coefficient of Determination}.
+
+### Adjusted $R^2$
+\small
+In `R`: \hfill `summary(...)$adj.r.squared ` with `...` being a regression object
+\begin{table}[c]
+        \centering
+          \resizebox{\textwidth}{!}{%
+          \begin{tabular}{L{0.2\linewidth}L{0.8\linewidth}}
+           \textit{Definition:} &  Proportion of variation in $Y$ that can be explained by regression using predictor(s) $X$. Values bound between 0 and 1.\\
+           & Does \textbf{penalize complex models}! \textbf{Increases} only if a \textbf{predictor} is \textbf{significant} and can \textbf{improve the model fit}.\\
+           \hline
+           \textbf{\textit{Calculation:}} & 
+           \begin{equation}
+           R^2_{adj} = 1 - \frac{\frac{1}{n-p-1}(y_{i} - \hat{y}_{i})^2}{\frac{1}{n}(y_{i} - \overline{y}_{i})^2} = R^2 - (1 - R^2) \frac{p}{n-p-1}
+           \end{equation} \\
+           $TSS$  & $\sum(y_{i} − \overline{y})^2$ \\
+           $RSS$  & $\sum\limits_{i=1}^n(y_{i} -\hat{y}_{i})^2$ \\
+           $n$  & Number of samples \\
+           $p$  & Number of parameters \\
+          \end{tabular}}
+        \label{Des_Stats}
+\end{table}
+
+\vspace{.2cm}
+\pause
+\raggedleft The larger $p$ is relative to $n$, the larger the adjustment will be.
+
+
+## Mallow’s $C_p$
+### Mallow’s $C_p$
+\small
+In `R`: \hfill `Cp()` in `CombMSC` package
+\begin{table}[c]
+        \centering
+          \resizebox{\textwidth}{!}{%
+          \begin{tabular}{L{0.2\linewidth}L{0.8\linewidth}}
+           \textit{Definition:} &  Estimate of test mean squared error of regression model fit using \textit{ordinary least squares}.\\
+           & Does \textbf{penalize complex models}! \\
+           \hline
+           \textbf{\textit{Calculation:}} & 
+           \begin{equation}
+           C_{p} = \frac{1}{n} \big(RSS + 2p\hat{\sigma}^2 \big)
+           \end{equation} \\
+           $RSS$  & $\sum\limits_{i=1}^n(y_{i} -\hat{y}_{i})^2$ \\
+           $n$  & Number of samples \\
+           $p$  & Number of parameters \\
+           $\sigma^2$ & Estimate of the variance of the error $\varepsilon$ \\
+          \end{tabular}}
+        \label{Des_Stats}
+\end{table}
+
+## Akaike Information Criterion (AIC)
+### Akaike Information Criterion (AIC)
+\small
+In `R`: \hfill `AIC()` in base `R`
+\begin{table}[c]
+        \centering
+          \resizebox{\textwidth}{!}{%
+          \begin{tabular}{L{0.2\linewidth}L{0.8\linewidth}}
+           \textit{Definition:} &  Estimate of test mean squared error of regression model fit using \textit{maximum likelihood estimation}.\\
+           & Does \textbf{penalize complex models}! \\
+           \hline
+           \textbf{\textit{Calculation:}} & 
+           \begin{equation}
+           AIC = 2p + 2ln(L(\hat{\theta}))
+           \end{equation} \\
+           $p$  & Number of parameters \\
+           $L(\hat{\theta})$ & Maximum value of model likelihood function\\
+          \end{tabular}}
+        \label{Des_Stats}
+\end{table}
+
+\vspace{.2cm}
+\pause
+\raggedleft For the standard linear model ($Y = \beta_{0} + \sum\limits_{j=1}^p (\beta_{j}X_{j}) + \varepsilon$) with Gaussian errors, maximum likelihood and least squares are the same thing leading to 
+\begin{equation}
+AIC = \frac{1}{n\hat{\sigma}^2} \big( RSS + 2p\hat{\sigma}^2 \big)
+\end{equation}
+
+## Bayesian Information Criterion (BIC)
+### Bayesian Information Criterion (BIC)
+\small
+In `R`: \hfill `BIC()` in base `R`
+\begin{table}[c]
+        \centering
+          \resizebox{\textwidth}{!}{%
+          \begin{tabular}{L{0.2\linewidth}L{0.8\linewidth}}
+           \textit{Definition:} &  Estimate of test mean squared error of regression model fit using \textit{maximum likelihood estimation}.\\
+           & Generally \textbf{penalizes complex models} more than other metrics! \\
+           \hline
+           \textbf{\textit{Calculation:}} & 
+           \begin{equation}
+           BIC = ln(n)p + 2ln(L(\hat{\theta}))
+           \end{equation} \\
+           $n$  & Number of samples \\
+           $p$  & Number of parameters \\
+           $L(\hat{\theta})$ & Maximum value of model likelihood function\\
+          \end{tabular}}
+        \label{Des_Stats}
+\end{table}
+
+\vspace{.2cm}
+\pause
+\raggedleft For the standard linear model ($Y = \beta_{0} +\sum\limits_{j=1}^p (\beta_{j}X_{j}) + \varepsilon$) with Gaussian errors we get: 
+\begin{equation}
+BIC = \frac{1}{n} \big( RSS + ln(n)p\hat{\sigma}^2 \big)
+\end{equation}
+
+## Receiver-Operator Characteristic (ROC)
+### Receiver-Operator Characteristic (ROC)
+\small
+In `R`: \hfill `ROC()` in `Epi` package
+\begin{table}[c]
+        \centering
+          \resizebox{\textwidth}{!}{%
+          \begin{tabular}{L{0.2\linewidth}L{0.8\linewidth}}
+           \textit{Definition:} &  Multiple metrics estimating classification accuracy.\\
+          & Highlights \textbf{Trade-Off} between \textbf{Sensitivity} (rate of true positives) and \textbf{Specificity} (rate of true negatives) \\
+           \hline
+           \textbf{\textit{Calculation:}} & 
+           \begin{equation}
+           Specificity = \frac{TN}{TN+FP}
+           \end{equation}
+           \begin{equation}
+           Sensitivity = \frac{TP}{TP+FN}
+           \end{equation} \\
+           $TN$  & Number of true negative assignments \\
+           $FP$  & Number of false positive assignments \\
+           $TP$  & Number of true positive assignments\\
+           $FN$  & Number of false negative assignments\\
+          \end{tabular}}
+        \label{Des_Stats}
+\end{table}
+
+\vspace{.2cm}
+\pause
+\raggedleft The AUC of the ROC curve is indicative of how well the model performs overall. Higher scores represent better accuracy.
+
 
 # Model Validation
+### What? Why? How?
+\begincols[T]
+\begincol{.5\linewidth}
+  \pause
+  \textbf{What} - \textit{Asses Model Inference}:
+  \begin{itemize}
+  \item How well do our models predict outcomes $Y$ given inputs $X$?
+  \end{itemize}
+  \vspace{.3cm}
+  \pause
+  \textbf{Why} - to quantify how much we \textit{trust our models}  
+  \begin{itemize}
+  \item Placing a lot of trust in a non-validated model can have terrible consequences
+  \item Comparing how much to trust different models can help us chose the better model or weigh predictions according to accuracy
+  \end{itemize}
+\endcol
+\begincol{.5\linewidth}
+  \pause
+  \textbf{How} - \textit{Model Validation}:
+  \begin{itemize}
+  \item Training/Test Data Approach
+  \item Leave-One-Out Cross-Validation (LOOCV)
+  \item k-Fold Cross-Validation (k-fold CV)
+  \item Bootstrap
+  \item ...
+  \end{itemize}
+\endcol
+\endcols
+
+## Training/Test Data
+### Training/Test Data
+\small
+\textbf{Procedure:}
+\begin{enumerate}
+\item Randomly split the data into \textbf{training} and \textbf{test} (also known as \textit{hold-out}) \textbf{parts}.
+\item Use the training part to build each possible model.
+\item For each model, use the test part to calculate the test error rate.
+\item Choose the model that gave the lowest test error rate.
+\end{enumerate}
+
+\only<1>{
+\includegraphics[width=1\linewidth]{Figures/51.pdf}
+}
+
+\only<2->{
+\textbf{Drawbacks:}
+\begin{itemize}
+\item The \textbf{test error can be highly variable} on different sampling splits.
+\item Only part of the observations are used to fit the model (training data). Statistical methods tend to have \textbf{higher bias} when trained on fewer observations.
+\end{itemize}
+\vspace{.2cm}
+\raggedleft Also know as \textbf{Validation Data Cross-Validation}.
+}
+
+
+
 ## Cross-Validation
-### Cross-Validation
+### Leave-One-Out Cross-Validation (LOOCV)
+\small
+\textbf{Procedure:}
+\begin{enumerate}
+\item Split data into \textbf{training} ($n-1$ observations) and \textbf{test} ($1$ observation) \textbf{parts}.
+\item For $i$ in $1, ..., n$:
+	\begin{enumerate}
+	\item Fit the model on training part and obtain $\hat{y}_{1}$ for $x_{1}$ in the test part.
+	\item Compute the corresponding test error, denoted as $MSE_{i}$.
+	\end{enumerate}
+\item Compute the final MSE for the each candidate model: $CV_{(n)} = \frac{1}{n} \sum\limits_{i=1}^n MSE_{i}$
+\end{enumerate}
+
+\only<1>{
+\centering \includegraphics[width=.7\linewidth]{Figures/53.pdf}
+}
+
+\only<2->{
+\textbf{Advantages over the validation set approach:}
+\begin{itemize}
+\item Far \textbf{less bias}. Tends not to overestimate the test error rate as much as the validation set approach does.
+\item Performing LOOCV multiple times will \textbf{always yield the same results} - there is \textbf{no randomness in the training/validation set splits}.
+\end{itemize}
+
+\textbf{Drawbacks:} 
+\begin{itemize}
+\item \textbf{Computational intensity} (every model needs to be fit $n-1$ times)!
+\end{itemize}
+}
+
+### k-Fold Cross-Validation (k-fold CV)
+\small
+\textbf{Procedure:}
+\begin{enumerate}
+\item For each candidate model:
+	\begin{enumerate}
+	\item Fit model on $K-1$ training parts, compute error (MSE) on the test part.
+	\item Repeat above step $K$ times for different test parts resulting in $MSE_{1}, ... , MSE _{k}$.
+	\item Calculate the corresponding $k$-fold CV value: $CV_{(k)} = \frac{1}{k} \sum\limits_{i=1}^k MSE_{i}$
+	\end{enumerate}
+\item Choose the model with the lowest $CV_{(k)}$
+\end{enumerate}
+
+\only<1>{
+\centering \includegraphics[width=.7\linewidth]{Figures/55.pdf}
+}
+
+\only<2->{
+\textbf{Advantage over LOOCV:}
+\begin{itemize}
+\item Much \textbf{less computationally expensive}!
+\end{itemize}
+\vspace{.2cm}
+\raggedleft LOOCV is k-fold CV with $k = n$.
+}
+
+
 ## Bootstrap
 ### Bootstrap
+\small
+\textbf{Procedure:}
+\begin{enumerate}
+\item Treat the observed sample $x = (x_{1}, x_{2}, ..., x_{n})$ as population.
+\item Obtain bootstrap sample $x^* = (x^*_{1}, x^*_{2}, ..., x^*_{n})$ by resampling with replacement.
+\item Repeat above step $B$ times to receive $B$ bootstrap samples,  build models for each sample and estimate model parameters.
+\end{enumerate}
+
+\only<1>{
+\centering \includegraphics[width=.5\linewidth]{Figures/511.pdf}
+}
+
+\only<2->{
+\textbf{Advantages:}
+\begin{itemize}
+\item Very \textbf{flexible} in its application to different methods.
+\item Allows \textbf{assessments of parameter uncertainty}.
+\end{itemize}
+\vspace{.2cm}
+\raggedleft Bootstrap estimates of a sampling distribution are analogous to histogram: one constructs a histogram of the available sample to obtain an estimate of the shape of the density function.
+}
+
+# Building Models
+## Subset Selection
+### Best Subset Selection
+Let $M_{0}$ denote the null model, which contains no predictors.
+\begin{enumerate}
+\item For $k = 1, 2, ..., p$:
+	\begin{enumerate}
+	\item Fit all $p_{(k)} = \frac{n!}{k!(n-k)!}$ models that contain exactly $k$ predictors.
+	\item Pick the best among these $p_{(k)}$ models, and call it $M_{k}$.
+	\end{enumerate}
+\item Select a single best model from among $M_{0}, ..., M_{p}$ using cross-validated prediction error, $C_{p}$ (AIC), BIC, or adjusted $R^2$.
+\end{enumerate}
+
+\pause
+
+\vspace{.2cm}
+\textbf{Low RSS or a high $\mathbf{R^2}$} indicates a model with a \textbf{low training error}, whereas a good model is characterized by a low \textbf{test error rate}.  
+
+\vspace{.2cm}
+\pause
+\textbf{Advantages:}
+\begin{itemize}
+\item \textbf{Simple} and conceptually appealing approach.
+\end{itemize}
+\pause
+\textbf{Drawbacks:}
+\begin{itemize}
+\item \textbf{Suffers from computational limitations} and becomes computationally unfeasible for $p > 40$.
+\end{itemize}
+
+### Forward Selection
+Let $M_{0}$ denote the null model, which contains no predictors.
+\begin{enumerate}
+\item For $k = 1, 2, ..., p-1$:
+	\begin{enumerate}
+	\item Consider all $p - k$ models that one predictor to $M_{k}$.
+	\item Choose the best among these $p − k$ models, and call it $M_{k+1}$.
+	\end{enumerate}
+\item Select a single best model from among $M_{0}, ..., M_{p}$ using cross-validated prediction error, $C_{p}$ (AIC), BIC, or adjusted $R^{2}$.
+\end{enumerate}
+
+\vspace{.2cm}
+\pause
+\textbf{Advantages over Best Subset Selection:}
+\begin{itemize}
+\item \textbf{Reduced computational expense}. Only considers $1 + \sum\limits_{k=0}^{p-1}(p-k) = 1+p(p+1)/2$ models instead of $2^{p}$.
+\end{itemize}
+\pause
+\textbf{Drawbacks:}
+\begin{itemize}
+\item \textbf{No guaranteed to find the best possible model} out of all $2_{p}$ models containing subsets of the $p$ predictors. 
+\end{itemize}
+
+
+### Backward Selection
+Let $M_{p}$ denote the full model, which contains $p$ predictors.
+\begin{enumerate}
+\item For $k = p-1, p-2, ..., 1$:
+	\begin{enumerate}
+	\item Consider all $k$ models that contain all but one of the predictors in $M_{k}$, for a total of $k − 1$ predictors.
+	\item Choose the best among these $k$ models, and call it $M_{k-1}$.
+	\end{enumerate}
+\item Select a single best model from among $M_{0}, ..., M_{p}$ using cross-validated prediction error, $C_{p}$ (AIC), BIC, or adjusted $R^{2}$.
+\end{enumerate}
+
+\vspace{.2cm}
+\pause
+\textbf{Advantages over Best Subset Selection:}
+\begin{itemize}
+\item \textbf{Reduced computational expense}. Only considers $1 + \sum\limits_{k=0}^{p-1}(p-k) = 1+p(p+1)/2$ models instead of $2^{p}$.
+\end{itemize}
+\pause
+\textbf{Drawbacks:}
+\begin{itemize}
+\item \textbf{No guaranteed to find the best possible model} out of all $2_{p}$ models containing subsets of the $p$ predictors. 
+\end{itemize}
+
+## Shrinkage Methods
+### Shrinkage - What Do I Use It For?
+\begin{center}
+\textbf{Shrinking extreme values} towards a central value results in a \textbf{better estimate} of the true mean.
+\end{center}
+
+\begincols[T]
+\begincol{.5\linewidth}
+  \pause
+  \textbf{Why?}
+  \begin{itemize}
+  \item More stable parameter estimates (less extreme outliers considered)
+  \item Reduction of sampling and non-sampling errors
+  \end{itemize}
+  \pause
+  \textbf{Disadvantages}
+  \begin{itemize}
+  \item Erroneous estimates if population has atypical mean. Knowing when this is the case is difficult.
+  \item Possible introduction of bias.
+  \item Shrunk models may fit new data worse than original models would.
+  \end{itemize}
+\endcol
+\begincol{.5\linewidth}
+  \pause
+  \textbf{How?}
+  \begin{itemize}
+  \item Fitting a model with all $p$ predictors
+  \item Shrink estimated coefficients towards zero relative to the least squares estimates
+  \end{itemize}
+  \pause
+  \vspace{.3cm}
+  Depending on what type of shrinkage is performed, some of the coefficients may be estimated to be exactly zero. Hence, shrinkage methods can also perform \textit{variable selection}.
+\endcol
+\endcols
+
+### Ridge Regression
+\small
+The ridge regression coefficient estimates, $\hat{\beta}^{R}$, are the values that minimize
+\begin{equation}
+RSS + \lambda \sum\limits_{j = 1}^p\beta_{j}^2 = \sum\limits_{i = 1}^n \bigg( y_{i} - \beta_{0} - \sum\limits_{j = 1}^p(\beta_{j}x_{i,j}) \bigg) + \lambda \sum\limits_{j = 1}^p\beta_{j}^2 
+\label{eq:RidgeRegression}
+\end{equation}
+
+\pause
+Equation \ref{eq:RidgeRegression} \textbf{trades off two different criteria}: 
+\begin{itemize}
+\item Coefficient estimates that fit the data well, by \textbf{making the RSS small}.
+\item The \textbf{shrinkage penalty} ($\lambda \sum\limits_{j}\beta_{j}^2$) is small when $\beta_{0}, \beta_{1}, ..., \beta_{p}$ are close to zero, thus shrinking penalty the estimates of $\beta_{j}$ towards zero.
+\end{itemize}
+ 
+\pause
+The \textbf{tuning parameter} $\lambda$ controls the relative impact of these two terms on the regression coefficient estimates. When $\lambda = 0$, the penalty term has no effect, and ridge regression will produce the least squares estimates. As $\lambda \rightarrow \infty$, the impact of the shrinkage penalty grows, and the ridge regression coefficient estimates will approach zero (decreased variance but increased bias).  
+
+### The Lasso
+\small
+The lasso coefficients, $\hat{\beta}_{\lambda}^L$, minimize the quantity
+\begin{equation}
+RSS + \lambda \sum\limits_{j = 1}^p\vert\beta_{j}\vert = \sum\limits_{i = 1}^n \bigg( y_{i} - \beta_{0} - \sum\limits_{j = 1}^p(\beta_{j}x_{i,j}) \bigg) + \lambda \sum\limits_{j = 1}^p\vert\beta_{j}\vert
+\label{eq:Lasso}
+\end{equation}
+
+\pause
+The $\beta_{j}^2$ term in the ridge regression penalty has been replaced by $\vert\beta_{j}\vert$ in the lasso.
+
+\vspace{.2cm}
+\pause
+The penalty $\vert\beta_{j}\vert$ has the effect of forcing some of the coefficient estimates to be exactly $0$ when the tuning parameter $\lambda$ is sufficiently large.  
+
+\pause
+\vspace{.4cm}
+\centering The lasso \textbf{performs variable selection}.  
+\vspace{.2cm}
+\raggedleft $\rightarrow$ Models generated from the lasso (also referred to as \textit{sparse models}) are generally much easier to interpret than those produced by ridge regression.
+
+### Ridge vs. Lasso
+\begin{figure}[h!]
+\centering
+\includegraphics[width=.7\linewidth]{Figures/67.pdf}
+\caption[Error and constrain functions of the lasso and ridge regression]{\textbf{Error and constrain functions of the lasso and ridge regression}: Both plots present a situation where $p = 2$. Contours of the error and constraint functions for the lasso (\textbf{left}) and ridge regression (\textbf{right}). The solid blue areas are the constraint regions, $\vert\beta_{1}\vert + \vert\beta_{2}\vert \leq s$ and $\beta_{1}^2 + \beta_{2}^2 \leq s$, while the red ellipses are the contours of the RSS.}
+\label{fig:VariableSelection} % called upon by \ref{LABEL}
+\end{figure}
 
 # Statistical Significance
 ## The $p$-value Conundrum
 ### The $p$-value Conundrum
-### The $p$-value
-## Effect Sizes
-### Effect Sizes
-## Confidence Intervals
-### Confidence Intervals
-## Akaike Information Criterion (AIC)
-### Akaike Information Criterion (AIC)
-## Bayes Factor
-### Bayes Factor
+\centering \textbf{"The $p$-value is the probability of randomly obtaining an effect at least as extreme as the one in your sample data, given the null hypothesis."}
 
-# Exercise
-## Online Resource
+\begincols
+  \begincol{.5\linewidth}
+  \pause
+  **Misconceptions**
+  \begin{itemize}
+  \item The $p$-value is not designed to tell us whether something is strictly true or false
+  \item It is not the probability of the null hypothesis being true
+  \item The size of $p$ does not yield any information about the strength of an observed effect
+  \end{itemize}
+  \endcol
+  \begincol{.5\linewidth}
+  \pause
+  **Mathematical Quirks**
+  \begin{itemize}
+  \item It varies strongly from sample-to-sample (depending on statistical power of the set-up)
+  \item If the sample size is big enough, the $p$value will always be below the $.05$ cut-off, no matter the magnitude of the effect
+  \end{itemize}
+  \endcol
+\endcols
+
+## Alternatives
+### Effect sizes
+\centering \textbf{"A measure of the magnitude of a statistical effect within the data (i.e. values calculated from test statistics)."}\newline
+\raggedleft\tiny $\sim$ Nakagawa \& Cuthill (2007). Effect size, confidence interval and statistical significance: A practical guide for biologists. Biological Reviews.\newline
+
+\vspace{.3cm}
+\normalsize\raggedright 
+\begin{itemize}
+\item \textbf{Intuitive} to interpret and often what we are interested in
+\item Three types for most situations:
+  \begin{itemize}
+  \item $r$ statistics (correlations)
+  \item $d$ statistics (comparisons of values)
+  \item $OR$ (odds ratio) statistics (risk measurements)
+  \end{itemize}
+\item These are \textbf{point estimates}
+\item Need to be reported alongside some information of credibility
+\item These are usually \textit{standardized} thus enabling meta-studies
+\end{itemize}
+\vspace{.3cm}
+\raggedleft \footnotesize In `R`: \url{https://cran.r-project.org/web/packages/compute.es/compute.es.pdf} and \url{https://cran.r-project.org/web/packages/effsize/effsize.pdf}
+
+### Confidence Intervals
+\centering \textbf{"Confidence intervals (CIs) answer the questions: 'How strong is the effect' and 'How accurate is that estimate of the population effect'."}\newline
+\raggedleft\tiny $\sim$ Halsey (2019). The reign of the p-value is over: what alternative analyses could we employ to fill the power vacuum? Biology Letters.\newline
+
+\vspace{.3cm}
+\normalsize\raggedright 
+\begin{itemize}
+\item \textbf{Intuitive} to interpret
+\item Answers the questions we are most interested in
+\item Does not require additional information of statistical certainty
+\item Combines \textbf{point estimates} and \textbf{range estimates}
+\item Removes some of the pressure of the \textit{"file drawer problem"}
+\item Shares the same mathematical framework as the $p$-value calculation
+\item Especially useful in \textbf{data visualization}
+\end{itemize}
+\vspace{.3cm}
+\raggedleft \footnotesize In `R`, many functions come with in-built ways of establishing CIs.
+
+### Akaike Information Criterion (AIC)
+\centering \textbf{The Akaike Information Criterion (AIC) is a indicator of model fit.}\newline
+\raggedleft\tiny $\sim$ Burnham et al. (2011). AIC model selection and multimodel inference in behavioral ecology: Some background, observations, and comparisons. Behavioral Ecology and Sociobiology.\newline
+
+\vspace{.3cm}
+\normalsize\raggedright 
+\begin{itemize}
+\item Used for \textbf{model selection and comparison}
+\item Lower AICs indicate better model fit
+\item One can establish contrasting models adhering to different hypothesis and identify which model suits the data best
+\item A proper hypothesis selection tool
+\item Model selection often comes with some degree of uncertainty
+\item Can be misused in step-wise model building procedures
+\end{itemize}
+\vspace{.3cm}
+\raggedleft \footnotesize In `R`, most model outputs can be assessed using the `AIC()` function.
+
+### Bayes Factor
+\centering \textbf{" The minimum Bayes factor is simply the exponential of the difference between the log-likelihoods of two competing models."}\newline
+\raggedleft\tiny $\sim$ Goodman (2001). Of P-Values and Bayes: A Modest Proposal. Epidemiology.\newline
+
+\vspace{.3cm}
+\normalsize\raggedright 
+\begin{itemize}
+\item \textbf{Intuitive} to interpret (Bayes Factor of 1/10 means that our study decreased the relative odds of the null hypothesis being true tenfold)
+\item Uses prior information to establish expected likelihoods thus enabling a progression in science
+\end{itemize}
+\vspace{.3cm}
+\raggedleft \footnotesize In `R`: \url{https://cran.r-project.org/web/packages/BayesFactor/BayesFactor.pdf} or direct Bayesian Statistics using JAGS or STAN (for example)
+
+## What Now?
+### Research Integrity
+\vspace{.3cm}
+\begin{enumerate}
+\item Distinguish between \textbf{pre-specified} (answering a question) and \textbf{exploratory} (formulating a question) studies.
+\vspace{.1cm}
+\item Express \textbf{research question in terms of expectations} of effect sizes
+\vspace{.1cm}
+\item Identify the \textbf{effect sizes best suited to answer} these \textbf{questions}
+\vspace{.1cm}
+\item \textbf{Report full study plan before commencing data collection}
+\vspace{.1cm}
+\item \textbf{Calculate measures} of statistical meaning that \textbf{enable meta-studies} (e.g. effect sizes and CIs)
+\vspace{.1cm}
+\item Make sure to \textbf{correctly interpret the results} outside of the $p$-value dichotomy of true and false
+\vspace{.1cm}
+\item \textbf{Report the findings in a meta-analytic context}
+\end{enumerate}
+
+### Where do we go from here?
+\begincols
+  \begincol{.5\linewidth}
+  \centering
+  \vspace{-4cm}
+  \textit{"Treat statistics as a science, and not a recipe"}\linebreak
+  $\sim$ Andrew Vickers
+  \endcol
+  \begincol{.5\linewidth}
+  \centering
+  \vspace{4cm} \linebreak
+  \textit{"The numbers are where the scientific discussion should start, not end!"}\linebreak
+  $\sim$ Regina Nuzzo
+  \endcol
+\endcols
