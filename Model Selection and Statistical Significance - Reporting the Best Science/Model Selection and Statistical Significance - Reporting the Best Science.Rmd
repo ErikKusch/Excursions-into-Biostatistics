@@ -491,7 +491,7 @@ RSS + \lambda \sum\limits_{j = 1}^p\beta_{j}^2 = \sum\limits_{i = 1}^n \bigg( y_
 Equation \ref{eq:RidgeRegression} \textbf{trades off two different criteria}: 
 \begin{itemize}
 \item Coefficient estimates that fit the data well, by \textbf{making the RSS small}.
-\item The \textbf{shrinkage penalty} ($\lambda \sum\limits_{j}\beta_{j}^2$) is small when $\beta_{0}, \beta_{1}, ..., \beta_{p}$ are close to zero, thus shrinking penalty the estimates of $\beta_{j}$ towards zero.
+\item The \textbf{shrinkage penalty} ($\lambda \sum\limits_{j}\beta_{j}^2$) is small when $\beta_{0}, \beta_{1}, ..., \beta_{p}$ are close to zero, thus the shrinking penalty forces the estimates of $\beta_{j}$ towards zero.
 \end{itemize}
  
 \pause
@@ -546,7 +546,7 @@ The penalty $\vert\beta_{j}\vert$ has the effect of forcing some of the coeffici
   **Mathematical Quirks**
   \begin{itemize}
   \item It varies strongly from sample-to-sample (depending on statistical power of the set-up)
-  \item If the sample size is big enough, the $p$value will always be below the $.05$ cut-off, no matter the magnitude of the effect
+  \item If the sample size is big enough, the $p$-value will always be below the $.05$ cut-off, no matter the magnitude of the effect
   \end{itemize}
   \endcol
 \endcols
