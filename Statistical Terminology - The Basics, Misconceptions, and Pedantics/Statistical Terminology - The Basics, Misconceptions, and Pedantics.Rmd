@@ -588,6 +588,10 @@ A few key points about these distributions:
 \item The AUC between two values on the X-axis equals the probability to randomly sample a value between these two points
 \end{itemize}
 
+\vspace{.3cm}
+\pause
+Find a masterful explanation of the single-value probability \href{https://www.youtube.com/watch?v=ZA4JkHKZM50}{here}.
+
 ## Normality
 ### Univariate Standard Normal/Gaussian Distribution
 \begin{tcolorbox}[colback=bondiblue!5,colframe=bondiblue!40!black,title=]
