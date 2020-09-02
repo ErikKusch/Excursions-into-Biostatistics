@@ -2,7 +2,7 @@
 title: "Rmarkdown - Manuscript Workflow Revisited"
 subtitle: "Using RStudio to Write Theses, Paper, and Presentations"
 author: "Erik Kusch"
-date: "18/06/2019"
+date: "10/09/2020"
 fontsize: 10pt
 output: 
   beamer_presentation: 
@@ -52,7 +52,7 @@ knitr::opts_chunk$set(echo = TRUE, message = FALSE, warning = FALSE, cache = TRU
   **What you need** (*Dependencies*) \newline
   To be able to use the bare minimum of `Rmarkdown`, you need an installation `R` and `RStudio` (These are the *basics*). \newline
   \pause
-  *Advanced* use of `Rmarkdown` is usually fuelled through \LaTeX \hspace{.04cm} and so you'll need installations of:  
+  *Advanced* use of `Rmarkdown` is usually funelled through \LaTeX \hspace{.04cm} and so you'll need installations of:  
   \begin{itemize}
   \item \LaTeX \hspace{.04cm} (for generation of pdf documents)
   \item JabRef (for referencing)
@@ -199,9 +199,9 @@ This is especially useful when wanting to generate reports that may be re-evalua
 \vspace{.2cm}
 \begin{itemize}
 \pause
-\item Figures are generated on each compilation (unless no cache is stored) thus always being up-to-date with the underlying data
+\item Figures are generated on each compilation (unless cache is stored and code in chunk that produces the figure hasn't changed) thus always being up-to-date with the underlying data
 \vspace{.1cm}
-\item Sub figures are established automatically as long as sub captions are supplied
+\item Subfigures are established automatically as long as subcaptions are supplied
 \vspace{.1cm}
 \item Figures are registered automatically for the table of figures
 \vspace{.1cm}
