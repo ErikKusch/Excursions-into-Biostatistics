@@ -50,9 +50,9 @@ knitr::opts_chunk$set(echo = TRUE, message = FALSE, warning = FALSE, cache = TRU
   \begincol{.5\linewidth}
   \pause
   **What you need** (*Dependencies*) \newline
-  To be able to use the bare minimum of `Rmarkdown`, you need an installation of `R` and `RStudio`. \newline
+  To be able to use the bare minimum of `Rmarkdown`, you need an installation `R` and `RStudio` (These are the *basics*). \newline
   \pause
-  *Advanced* use of `Rmarkdown` is usually fuelled through \LaTeX \hspace{.04cm} and so you'll need installations of:  
+  *Advanced* use of `Rmarkdown` is usually funelled through \LaTeX \hspace{.04cm} and so you'll need installations of:  
   \begin{itemize}
   \item \LaTeX \hspace{.04cm} (for generation of pdf documents)
   \item JabRef (for referencing)
@@ -174,7 +174,7 @@ Option | Function
 ---- | -------------
 name | A name for the chunk, these have to be individual
 eval | `TRUE` if code in chunk should be executed
-include | `TRUE` if chunk should be run and displayed in final document
+include | `TRUE` if chunk should be run but not included in final document
 echo | `TRUE` if code will be displayed
 tidy | `TRUE` if code should be displayed according to `tidy` formatting rules
 cache | `TRUE` if cache for chunk is to be stored for faster compilation on repeated knitting
@@ -199,9 +199,9 @@ This is especially useful when wanting to generate reports that may be re-evalua
 \vspace{.2cm}
 \begin{itemize}
 \pause
-\item Figures are generated on each compilation (unless cache is stored) thus always being up-to-date with the underlying data
+\item Figures are generated on each compilation (unless cache is stored and code in chunk that produces the figure hasn't changed) thus always being up-to-date with the underlying data
 \vspace{.1cm}
-\item Sub-figures are established automatically as long as sub-captions are supplied
+\item Subfigures are established automatically as long as subcaptions are supplied
 \vspace{.1cm}
 \item Figures are registered automatically for the table of figures
 \vspace{.1cm}
@@ -225,7 +225,6 @@ Basic options for coding chunks and kitting options should be defined at the beg
 ```{r setupshow, eval=FALSE, tidy = FALSE}
 # R options
 options(scipen=1, digits=4) # output options such as rounding digits
-
 # Knitting options
 knitr::opts_chunk$set(echo = TRUE, # show code
                       message = FALSE, # don't display code messages
@@ -258,7 +257,7 @@ $\sim\sim$strikethrough$\sim\sim$ | ~~strikethrough~~
 A line break in `Rmakrdown` can be achieved by ending a line with two spaces. \newline
 
 \pause
-More advanced text formatting is possible via the \LaTeX \hspace{.04cm} engine. An exhaustive guides for \LaTeX \hspace{.04cm} formatting can be found here (this covers almost all matters \LaTeX\hspace{.04cm}): \url{http://www.rpi.edu/dept/arc/docs/latex/latex-intro.pdf}.
+More advanced text formatting is possible via the \LaTeX \hspace{.04cm} engine. An exhaustive guides for \LaTeX \hspace{.04cm} formatting can be found here (this covers almost all matters \LaTeX \hspace{.04cm}: \url{http://www.rpi.edu/dept/arc/docs/latex/latex-intro.pdf}.
 
 <!-- ### Lists -->
 
@@ -303,7 +302,7 @@ A \LaTeX \hspace{.04cm} \textbf{figure environment} is useful for *including fig
 # Advanced `Rmarkdown`
 ### `kable` Tables I 
 
-The `kable` functionality in `Rmarkdown` enables us to generate appealing \LaTeX\hspace{.04cm}-styled tables directly via `R` coding: 
+The `kable` functionality in `Rmarkdown` enables us to generate appealing \LaTeX styled tables directly via `R` coding: 
 
 \scriptsize
 ```{r kable, results = 'asis', eval = FALSE}
@@ -433,6 +432,4 @@ These limitations often lead to *headaches when generating the presentations* bu
 \vspace{.3cm}
 \LaTeX \hspace{.04cm} column environment (used in `Beamer` presentations) do not allow for the evaluation of `Rmarkdown` syntax. 
 \vspace{.1cm}
-This can be circumvented by defining novel commands for the column environment instead of calling the default \LaTeX\hspace{.04cm} commands.
-
-
+This can be circumvented as by defining novel commands for the column environment instead of calling the default \LaTeX\hspace{.04cm} commands.
