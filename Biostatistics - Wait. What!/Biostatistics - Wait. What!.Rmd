@@ -2,7 +2,7 @@
 title: "Biostatistics"
 subtitle: "... wait. What!?"
 author: "Erik Kusch"
-date: "05/02/2020"
+date: "28/10/2020"
 fontsize: 10pt
 output: 
   beamer_presentation: 
@@ -50,11 +50,9 @@ knitr::opts_chunk$set(echo = TRUE, message = FALSE, warning = FALSE, cache = TRU
 }
 
 # Biological Terminology
-\only<1>{
 \begin{center}
 \textbf{No}, biostatistics are \textbf{not just for math nerds}.
 \end{center}
-}
 
 \begincols[T]
 \begincol{.5\linewidth}
@@ -251,4 +249,4 @@ Using `Rmarkdown` for your research comes with a multitude of advantages:  \vspa
 ## Need Statistical Advice?
 \centering
 \includegraphics[width=.95\textwidth]{Figures/Erik.png} \linebreak
-\pause \small Find me in room 318, building 1540 (Thursdays, 14.00-17.00) or via \url{erik.kusch@au.dk}.
+\pause \small Find me in room 318, building 1540 (Fridays, 09.00-12.00) or via \url{erik.kusch@bio.au.dk}.
