@@ -189,13 +189,15 @@ Given a variable range, one can establish however many "bins" as one wants. For 
 \footnotesize
 ```{r Logistic1}
 library(titanic)
-train_df <- na.omit(titanic_train) # remove NA rows
-test_df <- train_df[c(1:50),c(2,3,5,6)] # 50 data for testing
-train_df <- train_df[c(-1:-50),c(2,3,5,6)] # remaining data for training
+titanic_df <- na.omit(titanic_train) # remove NA rows
+set.seed(42)
+Rows <- sample(1:dim(titanic_df)[1], 50, replace = FALSE)
+test_df <- titanic_df[Rows,c(2,3,5,6)] # 50 data for testing
+train_df <- titanic_df[-Rows,c(2,3,5,6)] # remaining data for training
 head(train_df)
 ```
 
-\vspace{.5cm}
+\vspace{.1cm}
 \begin{tcolorbox}[colback=burgundy!5,colframe=burgundy!40!black,title=]
 \centering Can we explain \textbf{Survival} (`Survived`) based on \textit{Passenger class} (`Pclass`), \textit{sex} (`Sex`), and \textit{age} (`Age`). Was it really "Women and children first"?
 \end{tcolorbox}
@@ -333,10 +335,10 @@ Clearly, `Petal.Length`, and `Petal.Width` are extremely good separators for our
 
 But how sure can we be of our model accuracy? We can test it by **predicting** the cluster membership and **validating** our predictions against the real data:
 ```{r K3}
-Mclust_pred <- predict.Mclust(Mclust_mod, iris[,-5]) # prediction
+Mclust_pred <- predict.Mclust(Mclust_mod, test_df[,-c(1,6)]) # prediction
 fitted <- Mclust_pred$classification # predicted species number
 # compare actual data with predictions --> ERROR RATE
-mean(fitted != as.numeric(iris$Species))
+mean(fitted != as.numeric(test_df$Species))
 ```
 
 <!-- ## Support-Vector Machines -->
