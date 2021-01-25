@@ -2,7 +2,7 @@
 title: "Regressions"
 subtitle: "Correlations for the Advanced?"
 author: "Erik Kusch"
-date: "01/04/2020"
+date: "27/01/2021"
 fontsize: 10pt
 output: 
   beamer_presentation: 
@@ -85,10 +85,12 @@ These approaches are extremely useful in data exploration and for preliminary an
 ### Terminology
 \begincols
 \begincol{.5\linewidth}
-  \pause
   \begin{itemize}
+  \pause
     \item $\alpha$ - The \textbf{Intercept}. The value of $y$ when $x = 0$ (also referred to as $\beta_0$).
+  \pause
     \item $\beta_i$ - The \textbf{Correlation Coefficient}. The increase in $y$ for a one-unit increase in dependent variable $i$ (usually, $x$ if only one dependent variable).
+  \pause
     \item $\epsilon$ - The \textbf{Random Error}. The deviation of data points from the regression line. Usually assumed to follow $\epsilon \sim N(0, \sigma^2)$
   \end{itemize}
 \endcol
@@ -101,16 +103,112 @@ These approaches are extremely useful in data exploration and for preliminary an
 ### Assumptions in Theory
 Linear regression models need to be inspected for violations of assumptions after regressing:
   \begin{itemize}
-    \item \textbf{Residuals vs. Fitted values} \linebreak 
+    \pause
+    \item \textbf{Linearity} - \textit{Residuals vs. Fitted values} \linebreak 
     Non-linear patterns identify a non-linear relationship between dependent and independent variables.
-    \item \textbf{Normal Q-Q plot} \linebreak
+    \pause
+    \item \textbf{Normality} - \textit{Normal Q-Q plot} \linebreak
     Non-normal distribution of residuals shows that the assumption of $\epsilon \sim N(0, \sigma^2)$ is violated.
-    \item \textbf{Scale Location} \linebreak
+    \pause
+    \item \textbf{Homoscedasticity} - \textit{Scale Location} \linebreak
     Non-constant variance identifies show that the assumption of homoscedasticity (invoked by least squares fitting).
-    \item \textbf{Residuals vs. Leverage} \linebreak
+    \pause
+    \item \textbf{Outliers} - \textit{Residuals vs. Leverage} \linebreak
     A non-zero trend identifies the presence of influential outliers.
   \end{itemize}
-  
+
+### Linearity
+\begin{center}
+\textbf{"Linear" does not mean that there is a straight line!}
+\end{center}
+
+\vspace{.5cm}
+\pause
+
+"Linear" models refer to:
+\begin{itemize}
+  \pause
+  \item \textit{Additive} effects of predictors \linebreak
+  $\beta_1 P_1 + \beta_2 P_2 + .... + \beta_k P_k = \sum\limits_i^k\beta_iP_i $
+  \pause
+  \item \textit{Deterministic} combination of predictors to defining response \linebreak
+  $R = \alpha + \epsilon + \sum\limits_i^k\beta_iP_i $
+\end{itemize}
+
+### Normality
+\begin{center}
+\textbf{Normal distributions are common in nature.}
+\end{center}
+
+\vspace{.5cm}
+\pause
+
+Normal/Gaussian distributions are important because:
+\begin{itemize}
+  \pause
+  \item Easy to do Math with
+  \pause
+  \item Common in nature:
+    \begin{itemize}
+    \item Processes which add fluctuations create dampening 
+    \item Dampened fluctuations create Gaussian distributions
+  \end{itemize}
+  \pause
+  \item Information reduced to mean and variance
+  \pause
+  \item Underlying process can’t be inferred from the distribution
+\end{itemize}
+
+### Homoscedasticity
+\begin{center}
+\textbf{Variance contains important information.}
+\end{center}
+
+\vspace{.5cm}
+\pause
+
+Variation is at the heart of biology:
+\begin{itemize}
+  \pause
+  \item \textit{Abiotic} variation governs biological processes and patterns
+  \pause
+  \item \textit{Biological} variation can alter how ecosystem function and persist
+\end{itemize}
+
+\vspace{.5cm}
+\pause
+
+\begin{center}
+Ignoring variance is a \textbf{cardinal sin}.
+\end{center}
+
+### Outliers
+\begin{center}
+\textbf{Unexpected data values can still be valuable.}
+\end{center}
+
+\vspace{.5cm}
+\pause
+
+\begin{itemize}
+  \pause
+  \item \textit{Outlier sources:}
+    \begin{itemize}
+    \pause
+    \item Decimal delimiter errors
+    \item Imprecise recording
+    \item Noise
+    \item Extreme events/occurrences/records
+    \item Surprising findings
+    \end{itemize}
+  \pause
+  \item \textit{Identify outliers:}
+  \pause
+  \item \textit{Studentised residuals} ($|\frac{e_i}{sd_e}|$)
+  \pause
+  \item \textit{Knowledge} and \textit{Intuition} of the biological study system and sampling units
+\end{itemize}
+
 ### Assumptions in `R`
 \begincols
 \begincol{.45\linewidth}
@@ -131,8 +229,6 @@ Linear regression models need to be inspected for violations of assumptions afte
   \raggedleft \tiny By Knut Helge Jensen.
 \endcol
 \endcols
-
-
 
 ### Types of Regressions
 \begin{center}
@@ -164,7 +260,6 @@ Less model variables result in a more interpretable model!
   \end{itemize}
 \endcol
 \endcols
-
 
 ## Least Squares vs. Maximum Likelihood
 ### Least Squares vs. Maximum Likelihood
