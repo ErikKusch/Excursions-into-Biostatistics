@@ -2,7 +2,7 @@
 title: "Classifications"
 subtitle: "Order from Chaos"
 author: "Erik Kusch"
-date: "01/04/2020"
+date: "18/11/2020"
 fontsize: 10pt
 output: 
   beamer_presentation: 
@@ -189,50 +189,58 @@ Given a variable range, one can establish however many "bins" as one wants. For 
 \footnotesize
 ```{r Logistic1}
 library(titanic)
-train_df <- na.omit(titanic_train) # remove NA rows
-# retain first 50 rows for testing
-test_df <- train_df[c(1:50),c(2,3,5,6)] 
-# delete first 50 rows for testing
-train_df <- train_df[c(-1:-50),c(2,3,5,6)] 
+titanic_df <- na.omit(titanic_train) # remove NA rows
+set.seed(42)
+Rows <- sample(1:dim(titanic_df)[1], 50, replace = FALSE)
+test_df <- titanic_df[Rows,c(2,3,5,6)] # 50 data for testing
+train_df <- titanic_df[-Rows,c(2,3,5,6)] # remaining data for training
 head(train_df)
 ```
-\vspace{.5cm}
-\raggedleft $\rightarrow$ Let's see if there is a good explanation for **Survival** (`Survived`) to be had based off of *Passenger class* (`Pclass`), *sex* (`Sex`), and *age* (`Age`). Was it really "Women and children first"?
+
+\vspace{.1cm}
+\begin{tcolorbox}[colback=burgundy!5,colframe=burgundy!40!black,title=]
+\centering Can we explain \textbf{Survival} (`Survived`) based on \textit{Passenger class} (`Pclass`), \textit{sex} (`Sex`), and \textit{age} (`Age`). Was it really "Women and children first"?
+\end{tcolorbox}
 
 ### Example - The Model
-\tiny
-```{r Logistic2, fig.height= 5}
-Logistic_Mod <- glm(Survived ~., family=binomial(link='logit'), data = train_df)
-summary(Logistic_Mod)
+\footnotesize
+```{r Logistic2}
+Logistic_Mod <- glm(Survived ~., # use all variables in the data frame
+                    family = binomial(link = 'logit'), # logistic
+                    data = train_df # where to take the data from
+                    )
+summary(Logistic_Mod)[["coefficients"]]
 ```
+
+\vspace{.5cm}
+\begin{tcolorbox}[colback=bondiblue!5,colframe=bondiblue!40!black,title=]
+\centering Logistic Regression Coefficients can't be interpreted the same way as regular linear model coefficients since we are interested in survival probabilities between $0$ and $1$.
+\end{tcolorbox}
 
 ### Example - Explanation \& Prediction
 \footnotesize
-Obviously, the coefficients of our model can't be **explained** the same way as typical regression coefficients since we are interested in survival probabilities between $0$ and $1$. However, we can interpret the **direction** and **strength** of effects as well as their statistical significance at a glance:  
+\begin{tcolorbox}[colback=green!5,colframe=green!40!black,title=]
+\centering Clearly, women of a young age in first class had the highest survival rate.
+\end{tcolorbox}
 
-Clearly, women of a young age in first class had the highest survival rate. How do we know this? As class increases (from 1 to 3), survival probability decreases (`r summary(Logistic_Mod)[["coefficients"]][2,1]`). Furthermore, men had, on average, a much lower survival rate than women (`r summary(Logistic_Mod)[["coefficients"]][3,1]`). Lastly, increasing age negatively affected survival chances (`r summary(Logistic_Mod)[["coefficients"]][4,1]`).  
+How do we know this? As *class* increases (from 1 to 3), survival probability decreases (`r summary(Logistic_Mod)[["coefficients"]][2,1]`). Furthermore, men (*sexmale*) had, on average, a much lower survival rate than women (`r summary(Logistic_Mod)[["coefficients"]][3,1]`). Lastly, increasing *age* negatively affected survival chances (`r summary(Logistic_Mod)[["coefficients"]][4,1]`).  
 
-\vspace{.3cm}
+\vspace{.05cm}
 
 But how sure can we be of our model accuracy? We can test it by **predicting** some new data and **validating** our predictions:
-\tiny
-```{r Logistic3, fig.height= 5}
-fitted.results <- predict(Logistic_Mod, newdata=test_df, type='response') # predict on test data
-fitted.results <- ifelse(fitted.results > 0.5 , 1, 0) # if predicted survival probability above .5 assume survival
-misClasificError <- mean(fitted.results != test_df$Survived) # compare actual data with predictions
-print(paste('Accuracy',1-misClasificError)) # output
+```{r Logistic3}
+# predict on test data
+fitted <- predict(Logistic_Mod, newdata=test_df, type='response') 
+# if predicted survival probability above .5 assume survival
+fitted <- ifelse(fitted > 0.5 , 1, 0) 
+# compare actual data with predictions --> ERROR RATE
+mean(fitted != test_df$Survived) 
 ```
 
-<!-- ### Example - Visualisation -->
-<!-- \tiny -->
-<!-- ```{r Logistic5, fig.height= 5} -->
-<!-- Age_Mod <- glm(Survived ~ Age, family=binomial(link='logit'), data = train_df) # build model only for age -->
-<!-- Ages <- seq(from = floor(range(titanic_train$Age, na.rm = TRUE)[1]), # lowest age range -->
-<!--             to = ceiling(range(titanic_train$Age, na.rm = TRUE)[2]), .01) # highest age range  -->
-<!-- plotresults <- predict(Age_Mod, list(Age=Ages), type="response") # predict -->
-<!-- plot(titanic_train$Age, titanic_train$Survived, pch = 16, xlab = "Age", ylab = "Survival") # plot raw data -->
-<!-- lines(Ages, plotresults, col = "red", lwd = 2) # plot predicted trend -->
-<!-- ``` -->
+\vspace{.05cm}
+\begin{tcolorbox}[colback=burgundy!5,colframe=burgundy!40!black,title=]
+\centering In reality, one would fine-tune the probability at which to assume survivorship!
+\end{tcolorbox}
 
 ## K-Means
 ### Theory
@@ -254,8 +262,12 @@ print(paste('Accuracy',1-misClasificError)) # output
   \end{tabular}}
 \end{table}
 
+\vspace{.5cm}
+\begin{tcolorbox}[colback=bondiblue!5,colframe=bondiblue!40!black,title=]
+\centering `mclust` is capable of identifying the statistically most appropriate number of clusters for the data set.
+\end{tcolorbox}
 
-### Example - The Data
+### Example - The Data I
 \footnotesize
 ```{r K1}
 data("iris")
@@ -263,38 +275,71 @@ head(iris)
 ```
 
 \vspace{.5cm}
-\raggedleft $\rightarrow$ Let's see if we can accurately identify the `Species` contained within the data set by clustering according to `Sepal.Length`, `Sepal.Width`, `Petal.Length`, and `Petal.Width`.  \vspace{.2cm}
+\begin{tcolorbox}[colback=burgundy!5,colframe=burgundy!40!black,title=]
+\centering Can we accurately identify the `Species` contained within the data set by clustering according to `Sepal.Length`, `Sepal.Width`, `Petal.Length`, and `Petal.Width`?
+\end{tcolorbox}
 
-\pause
-\raggedright `mclust` is capable of identifying the statistically most appropriate number of clusters for the data set. Here, we decide to limit the number of clusters to the number of species present so we can test how well the prediction went.
+Here, we decide to limit the number of clusters to the number of species present so we can test how well the prediction went.
 
-### Example - The Model
-\tiny
-```{r K2, fig.height = 5}
+### Example - The Data II
+
+\footnotesize
+
+\begin{tcolorbox}[colback=burgundy!5,colframe=burgundy!40!black,title=]
+\centering When building a \textit{training} and \textit{test} data set for identification of discrete values, we need to identify data of each group in both data sets. We do so via \textbf{stratified sampling}.
+\end{tcolorbox}
+
+```{r}
+library(splitstackshape) # access to the stratified function
+set.seed(42) # make sampling reproducible
+test_df <- stratified(indt = iris, # input data
+           group = "Species", # what the strata are
+           size = 7, # how many samples per strata
+           keep.rownames = TRUE) # keep the original rownames
+training_df <- iris[-as.numeric(test_df$rn), ] # training data
+```
+
+\vspace{.5cm}
+\begin{tcolorbox}[colback=bondiblue!5,colframe=bondiblue!40!black,title=]
+\centering Doing this assures that we have data for each group to build a classifier as well as test the validity of our grouping.
+\end{tcolorbox}
+
+### Example - The Model I
+\footnotesize
+```{r K2, fig.height = 4.5}
 library(mclust)
-Mclust_mod <- Mclust(iris[,-5], # data for the cluster model
-                   G = length(unique(iris[,5]))) # number of species
+Mclust_mod <- Mclust(training_df[,-5], # data for the cluster model
+                   G = length(unique(training_df[,5]))) # group number
 plot(Mclust_mod, what = "uncertainty")
 ```
 
+### Example - The Model II
+\footnotesize
+\begin{tcolorbox}[colback=bondiblue!5,colframe=bondiblue!40!black,title=]
+\centering Looking at the cluster centres and/or spreads can help with some \textbf{biological interpretation}.
+\end{tcolorbox}
+```{r}
+Mclust_means <- Mclust_mod[["parameters"]][["mean"]] # extract means
+colnames(Mclust_means) <- unique(training_df$Species) # set columns
+Mclust_means
+```
+\vspace{.5cm}
+
+I prefer a visualization as seen on the previous slide. 
+
 ### Example - Explanation \& Prediction
 \footnotesize
-K-means clusters can be interpreted to a certain degree. For example, by calling `Mclust_mod[["parameters"]][["mean"]]` we can assess the mean value of each cluster for each variable. These allow for some **biological interpretation**. Personally, I prefer a visualization as seen on the previous slide. Clearly, `Petal.Length`, and `Petal.Width` are extremely good separators for our different clusters with the green and red clusters overlapping a lot in `Sepal.Length` and `Sepal.Width` space.  
+Clearly, `Petal.Length`, and `Petal.Width` are extremely good separators for our different clusters with the green and red clusters (`versicolor` and `virginica`) overlapping a lot in `Sepal.Length` and `Sepal.Width` space.  
 
 \vspace{.3cm}
 
 But how sure can we be of our model accuracy? We can test it by **predicting** the cluster membership and **validating** our predictions against the real data:
 ```{r K3}
-Mclust_pred <- predict.Mclust(Mclust_mod, iris[,-5]) # prediction
-# extract predicted species number
-fitted.results <- Mclust_pred$classification 
-# compare actual data with predictions
-misClasificError <- mean(fitted.results != as.numeric(iris$Species)) 
-print(paste('Accuracy',1-misClasificError)) # output
+Mclust_pred <- predict.Mclust(Mclust_mod, test_df[,-c(1,6)]) # prediction
+fitted <- Mclust_pred$classification # predicted species number
+# compare actual data with predictions --> ERROR RATE
+mean(fitted != as.numeric(test_df$Species))
 ```
-
-\pause
-\raggedleft \textbf{Attention!} We wouldn't want to do this in a real analysis. There, we would like to split the data in training and test data like we did with the logistic regression example.
 
 <!-- ## Support-Vector Machines -->
 <!-- ### Theory -->
@@ -341,61 +386,78 @@ print(paste('Accuracy',1-misClasificError)) # output
   \end{tabular}}
 \end{table}
 
-### Example - The Data
+### Example - The Data I
 \footnotesize
 ```{r H1a}
 data("iris")
 head(iris)
 ```
 \vspace{.5cm}
-\raggedleft $\rightarrow$ Again, let's see if we can accurately identify the `Species` contained within the data set by clustering according to `Sepal.Length`, `Sepal.Width`, `Petal.Length`, and `Petal.Width`.  \vspace{.2cm}
+\begin{tcolorbox}[colback=burgundy!5,colframe=burgundy!40!black,title=]
+\centering Again, let's see if we can accurately identify the `Species` contained within the data set by clustering according to `Sepal.Length`, `Sepal.Width`, `Petal.Length`, and `Petal.Width`.
+\end{tcolorbox}
 
-\pause
-\raggedright `hclust()` can only handle distance matrices. We generate one between the numeric components of our data set as seen below.
+### Example - The Data II \& Model I
+\footnotesize
+\begin{tcolorbox}[colback=burgundy!5,colframe=burgundy!40!black,title=]
+\centering `hclust()` can only handle distance matrices.
+\end{tcolorbox}
+\vspace{.2cm}
+We a distance matrix between the numeric components of our data like so:
 ```{r H1b}
 dist_mat <- dist(iris[, -5])
 ```
-A distance matrix stores information about the dissimilarity of different observations.
+\vspace{.2cm}
+\begin{tcolorbox}[colback=bondiblue!5,colframe=bondiblue!40!black,title=]
+\centering A distance matrix stores information about the dissimilarity of different observations.
+\end{tcolorbox}
 
-### Example - The Model
-\tiny
+\vspace{.5cm}
+\pause
+Now, we can build our initial model:
+```{r}
+clusters <- hclust(dist_mat, method = "complete")
+```
+
+### Example - The Model II
+\footnotesize
 ```{r H2, fig.height = 5}
-clusters <- hclust(dist_mat)
-plot(clusters)
-abline(h = 3, col = "red")
+par(mfrow = c(1,3))
+plot(clusters, main = "complete")
+plot(hclust(dist_mat, method = "single"), main = "single")
+plot(hclust(dist_mat, method = "average"), main = "average")
 ```
 
 ### Example - Explanation \& Prediction
 \footnotesize
-Obviously, our initial dendrogramm recognizes way more clusters than we are interested in. In fact, it recognizes as many clusters as their are observations. We may wish to cut the tree down to a proper size. We know that we have three species in our data, so we may want to cut the tree at a height of $3$ - not because that's the number of species, but because the tree just so happens to recognize three clusters at that level of decision-making.
+\begin{tcolorbox}[colback=burgundy!5,colframe=burgundy!40!black,title=]
+\centering Hierarchical clustering recognises as many groups as there are observation and we may wish to \textbf{prune} the decision tree to a meaningful split level.
+\end{tcolorbox}
+\vspace{.2cm}
+
+We know that we have three species in our data, so we may want to cut the complete tree at a height of $3$ (not because that's the number of species, but because the tree just so happens to recognize three clusters at that level of decision-making).
 
 ```{r H3}
 clusterCut <- cutree(clusters, 3) # cut tree
 table(clusterCut, iris$Species) # assess fit
 ```
 
-As we can see here, our decision tree has had no issue identifying *setosa* and *virginica* into clusters $1$ and $2$ respectively. However, it is struggling with placing the species *versicolor*.
-
-\pause
-\vspace{.2cm}
-\raggedleft Note that we did not take into account any special linkages here!
+As we can see here, our decision tree has had no issue identifying *setosa* and *versicolor* into clusters $1$ and $2$ respectively. However, it is struggling with placing the species *virginica*.
 
 ### Example - Decisions
 \footnotesize
 So far we weren't able to tell the actual decision rules of how to cluster our data. Let's do this:  
-\tiny
-```{r H4, fig.height = 3.8}
+\footnotesize
+```{r H4, fig.height = 4.1}
 library(rpart)
 fit <- rpart(Species ~. , data = iris)
-plot(fit)
-text(fit, use.n = TRUE)
+plot(fit, margin = .1); text(fit, use.n = TRUE)
 ```
 
-\vspace{-.2cm}
+\vspace{-.5cm}
 
 \pause
-\footnotesize
-\raggedleft Despite the slightly awkward plotting, we can tell that our decisions for assigning species membership build on `Petal.Length` and `Petal.Width` in this example (remember the K-mean clustering which showed roughly the same?)!
+\raggedleft We can tell that our decisions for assigning species membership build on `Petal.Length` and `Petal.Width` in this example (remember the K-mean clustering)!
 
 ## Random Forests
 ### Theory
@@ -426,38 +488,44 @@ text(fit, use.n = TRUE)
 ### Example - The Data
 \footnotesize
 ```{r RF1}
-library(randomForest)
 data("iris")
 head(iris)
 ```
 \vspace{.5cm}
-\raggedleft $\rightarrow$ Once more, let's see if we can accurately identify the `Species` contained within the data set by clustering according to `Sepal.Length`, `Sepal.Width`, `Petal.Length`, and `Petal.Width`.
+\begin{tcolorbox}[colback=burgundy!5,colframe=burgundy!40!black,title=]
+\centering One final time, we ask whether we can accurately identify the `Species` contained within the data set by clustering according to `Sepal.Length`, `Sepal.Width`, `Petal.Length`, and `Petal.Width`.
+\end{tcolorbox}
 
 ### Example - The Model
-\tiny
+\footnotesize
 ```{r RF2}
+library(randomForest)
 set.seed(42) # set seed because the process is random
 RF_Mod <- tuneRF(x = iris[,-5], # variables which to use for clustering
                  y = iris[,5], # correct cluster assignment
-                 strata = iris[,5], # consider this for stratified sampling
+                 strata = iris[,5], # stratified sampling
                  doBest = TRUE, # run the best overall tree
                  ntreeTry = 20000, # consider this number of trees
-                 improve = 0.0001, # use an improvement for tuning if this margin is exceeded
+                 improve = 0.0001, # improvement if this is exceeded
                  trace = FALSE, plot = FALSE)
-RF_Mod
+RF_Mod[["confusion"]]
 ```
-\footnotesize
-\raggedleft That is one \textbf{stunningly accurate} tree!
+
 
 ### Example - Explanation
 \footnotesize
+\begin{tcolorbox}[colback=green!5,colframe=green!40!black,title=]
+\centering That is one \textbf{stunningly accurate} classification!
+\end{tcolorbox}
+
+\vspace{.3cm}
 Let's see which variables where actually the most useful when making our clustering decisions:  
 ```{r RF3, fig.height = 4}
 varImpPlot(RF_Mod)
 ```
 
-\pause
-Again, `Petal.Width` and `Petal.Length` alone seem to be almost enough to accurately classify all of our `iris` data in their respective species memberships!
+<!-- \pause -->
+<!-- Again, `Petal.Width` and `Petal.Length` alone seem to be almost enough to accurately classify all of our `iris` data in their respective species memberships! -->
 
 ## Networks
 ### Theory
@@ -498,7 +566,9 @@ data("foodwebs")
 Foodweb_ig <- foodwebs[[2]]
 ```
 \vspace{.5cm}
-\raggedleft $\rightarrow$ Let's see what kind of network-internal clusters we can make out.
+\begin{tcolorbox}[colback=burgundy!5,colframe=burgundy!40!black,title=]
+\centering Let's see what kind of network-internal clusters we can make out.
+\end{tcolorbox}
 
 ### Example - A Directed Network
 \tiny
@@ -538,37 +608,42 @@ plot(Foodweb_ig,
   \endcol
 \endcols
 
-
-
-<!-- ### Example - An Undirected Network -->
-<!-- \tiny -->
-<!-- \begincols[T] -->
-<!--   \begincol{.4\linewidth} -->
-<!--   An **undirected network** is one in which we don't know which node/vertex is acting one which other node/vertex.   -->
-
-<!--   We identify the clusters as follows (there are more options): -->
-<!-- ```{r N3, fig.width=7, eval = FALSE} -->
-<!-- Foodweb_ig <- as.undirected(Foodweb_ig) -->
-<!-- Clusters <- cluster_fast_greedy(Foodweb_ig) -->
-<!-- Colours <- Clusters$membership -->
-<!-- Colours <- rainbow(max(Colours))[Colours] -->
-<!-- plot(Foodweb_ig,  -->
-<!--      vertex.color = Colours, -->
-<!--      vertex.size = degree(Foodweb_ig)*0.5,  -->
-<!--      layout=layout.grid, edge.arrow.size=0.001) -->
-<!-- ``` -->
-<!--   This identifies sub-networks/clusters by optimizing the modularity score of the overall network (i.e. optimizing connectictions within vs. between clusters). -->
-<!--   \endcol -->
-<!--   \begincol{.6\linewidth} -->
-<!-- ```{r N3b, fig.width=7, echo = FALSE} -->
-<!-- Foodweb_ig <- as.undirected(Foodweb_ig) -->
-<!-- Clusters <- cluster_fast_greedy(Foodweb_ig) -->
-<!-- Colours <- Clusters$membership -->
-<!-- Colours <- rainbow(max(Colours))[Colours] -->
-<!-- plot(Foodweb_ig,  -->
-<!--      vertex.color = Colours, -->
-<!--      vertex.size = degree(Foodweb_ig)*0.5,  -->
-<!--      layout=layout.grid, edge.arrow.size=0.001) -->
-<!-- ``` -->
-<!--   \endcol -->
-<!-- \endcols -->
+### Example - An Undirected Network
+\tiny
+\vspace{-.5cm}
+\begincols[T]
+  \begincol{.4\linewidth}
+  \footnotesize
+  \vspace{1cm}
+  An **undirected network** is one in which we don't know which node/vertex is acting one which other node/vertex.  
+  
+  \vspace{.3cm}
+  
+  We identify the clusters as follows (there are more options):  
+  \tiny
+```{r N3, fig.width=7, eval = FALSE}
+Foodweb_ig <- as.undirected(Foodweb_ig)
+Clusters <- cluster_fast_greedy(Foodweb_ig)
+Colours <- Clusters$membership
+Colours <- rainbow(max(Colours))[Colours]
+plot(Foodweb_ig,
+     vertex.color = Colours,
+     vertex.size = degree(Foodweb_ig)*0.5,
+     layout=layout.grid, edge.arrow.size=0.001)
+```
+  \footnotesize
+  This identifies sub-networks/clusters by optimizing the modularity score of the overall network (i.e. optimizing connections within vs. between clusters).
+  \endcol
+  \begincol{.6\linewidth}
+```{r N3b, fig.width=7, echo = FALSE}
+Foodweb_ig <- as.undirected(Foodweb_ig)
+Clusters <- cluster_fast_greedy(Foodweb_ig)
+Colours <- Clusters$membership
+Colours <- rainbow(max(Colours))[Colours]
+plot(Foodweb_ig,
+     vertex.color = Colours,
+     vertex.size = degree(Foodweb_ig)*0.5,
+     layout=layout.grid, edge.arrow.size=0.001)
+```
+  \endcol
+\endcols
