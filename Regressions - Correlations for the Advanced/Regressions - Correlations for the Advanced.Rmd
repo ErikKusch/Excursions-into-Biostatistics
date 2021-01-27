@@ -344,8 +344,8 @@ with $\hat{y}_{i} = \hat{\beta}_{0} + \hat{\beta}_{1}x_{i}$
       \begin{itemize}
       \item Down to \textit{Study-Design}:
       \begin{itemize}
-      \item Predictor variable is continuous (ratio or interval scale)
       \item Response variable is continuous (ratio or interval scale)
+      \item Predictor variable is continuous (ratio or interval scale)
       \item Variable values are \textbf{independent} (not paired)
       \end{itemize}
       \item Need for \textit{Post-Hoc Tests}:
@@ -410,8 +410,8 @@ At a `Volume` of $0$, `Girth` is predicted to be `r summary(SingleLin_Mod)[["coe
       \begin{itemize}
       \item Down to \textit{Study-Design}:
       \begin{itemize}
-      \item Predictor variable is continuous (ratio or interval scale)
-      \item Response variables are continuous (ratio or interval scale) and/or categorical (metric or ordinal scale)
+      \item Response variable is continuous (ratio or interval scale)
+      \item Predictor variables are continuous (ratio or interval scale) and/or categorical (metric or ordinal scale)
       \end{itemize}
       \item Need for \textit{Post-Hoc Tests}:
       \begin{itemize}
