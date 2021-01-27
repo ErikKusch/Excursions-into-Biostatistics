@@ -111,7 +111,7 @@ Linear regression models need to be inspected for violations of assumptions afte
     Non-normal distribution of residuals shows that the assumption of $\epsilon \sim N(0, \sigma^2)$ is violated.
     \pause
     \item \textbf{Homoscedasticity} - \textit{Scale Location} \linebreak
-    Non-constant variance identifies show that the assumption of homoscedasticity (invoked by least squares fitting).
+    Non-constant variance shows that the assumption of homoscedasticity (invoked by least squares fitting) is violated.
     \pause
     \item \textbf{Outliers} - \textit{Residuals vs. Leverage} \linebreak
     A non-zero trend identifies the presence of influential outliers.
@@ -128,12 +128,19 @@ Linear regression models need to be inspected for violations of assumptions afte
 "Linear" models refer to:
 \begin{itemize}
   \pause
-  \item \textit{Additive} effects of predictors \linebreak
+  \item \textit{Additive} effects of predictors ($P$) \linebreak
   $\beta_1 P_1 + \beta_2 P_2 + .... + \beta_k P_k = \sum\limits_i^k\beta_iP_i $
   \pause
-  \item \textit{Deterministic} combination of predictors to defining response \linebreak
+  \item \textit{Deterministic} combination of predictors ($P$) to defining response ($R$) \linebreak
   $R = \alpha + \epsilon + \sum\limits_i^k\beta_iP_i $
 \end{itemize}
+
+\vspace{.5cm}
+\pause
+
+\begin{center}
+You can model curved relationships with a number of \textit{tricks} like \textbf{exponential functions}, \textbf{polynomials}, \textbf{splines}.
+\end{center}
 
 ### Normality
 \begin{center}
@@ -158,6 +165,13 @@ Normal/Gaussian distributions are important because:
   \pause
   \item Underlying process can’t be inferred from the distribution
 \end{itemize}
+
+\vspace{.5cm}
+\pause
+
+\begin{center}
+Models which are \textbf{mechanisitically wrong} can still excell in \textbf{predictive power}.
+\end{center}
 
 ### Homoscedasticity
 \begin{center}
@@ -203,28 +217,36 @@ Ignoring variance is a \textbf{cardinal sin}.
     \end{itemize}
   \pause
   \item \textit{Identify outliers:}
-  \pause
-  \item \textit{Studentised residuals} ($|\frac{e_i}{sd_e}|$)
-  \pause
-  \item \textit{Knowledge} and \textit{Intuition} of the biological study system and sampling units
+    \begin{itemize}
+    \pause
+    \item \textit{Studentised residuals} ($|\frac{e_i}{sd_e}|$)
+    \pause
+    \item \textit{Knowledge} and \textit{Intuition} of the biological study system and sampling units
+    \end{itemize}
 \end{itemize}
 
 ### Assumptions in `R`
+Simply type `plot(...)` with `...` denoting your regression model.
 \begincols
-\begincol{.45\linewidth}
+\begincol{.5\linewidth}
   \pause
-  \begin{itemize}
-    \item Simply type `plot(...)` with `...` denoting your regression model.
-    \item You can also target individual plots by writing:
-    \begin{itemize}
-      \item `plot(..., 1)` for Residuals vs. Fitted values
-      \item `plot(..., 2)` for Normal Q-Q plot
-      \item `plot(..., 3)` for Scale Location
-      \item `plot(..., 4)` for Residuals vs. Leverage
-    \end{itemize}
-  \end{itemize}
+  You can also target individual plots:  
+  1. `plot(..., 1)` (Residuals/Fitted)  
+  2. `plot(..., 2)` (Normal Q-Q plot)  
+  3. `plot(..., 3)` (Scale Location)  
+  4. `plot(..., 4)` (Residuals/Leverage)  
+  <!-- \begin{itemize} -->
+  <!--   \item Simply type `plot(...)` with `...` denoting your regression model. -->
+  <!--   \item You can also target individual plots by writing: -->
+  <!--   \begin{itemize} -->
+  <!--     \item `plot(..., 1)` for Residuals vs. Fitted values -->
+  <!--     \item `plot(..., 2)` for Normal Q-Q plot -->
+  <!--     \item `plot(..., 3)` for Scale Location -->
+  <!--     \item `plot(..., 4)` for Residuals vs. Leverage -->
+  <!--   \end{itemize} -->
+  <!-- \end{itemize} -->
 \endcol
-\begincol{.55\linewidth}
+\begincol{.5\linewidth}
   \centering \includegraphics[width=1\linewidth]{Figures/Assumpts.png}
   \raggedleft \tiny By Knut Helge Jensen.
 \endcol
@@ -487,7 +509,7 @@ summary(MultiLin_Mod)
 ```
 
 ### Example - Model Output Explained
-Variance between chicks ($0.006581$) than residual variance ($42.46$). This is good!  
+Variance between chicks ($0.006581$) is smaller than residual variance ($42.46$). This is good!  
 \vspace{.2cm}
 
 A chick is expected to have a `weight`of `r summary(MultiLin_Mod)[["coefficients"]][["fixed"]][1]` at `Time` $= 0$ and `Diet` $= 1$. Per time-step, `weight` is expected to increase by `r summary(MultiLin_Mod)[["coefficients"]][["fixed"]][2]`.
@@ -496,7 +518,7 @@ A chick is expected to have a `weight`of `r summary(MultiLin_Mod)[["coefficients
 Mean chick `weight` is different to (read: "Diet1 weights are smaller by") `Diet` $=1$ by `r summary(MultiLin_Mod)[["coefficients"]][["fixed"]][3]`, `r summary(MultiLin_Mod)[["coefficients"]][["fixed"]][4]`, and `r summary(MultiLin_Mod)[["coefficients"]][["fixed"]][5]` for `Diet` $=2$, `Diet` $=3$, and `Diet` $=4$ respectively (take note that these differences aren't statistically significant).  
 \vspace{.2cm}
 
-`weight` of chicks increases, on average, increases by `r summary(MultiLin_Mod)[["coefficients"]][["fixed"]][6]` units more per one-unit increase in time when compared to `Diet` $=1$. The same logic applies to `Diet` $=3$, and `Diet` $=4$.
+For `Diet` $=2$, `weight` of chicks increases, on average, by `r summary(MultiLin_Mod)[["coefficients"]][["fixed"]][6]` units more per one-unit increase in time when compared to `Diet` $=1$. The same logic applies to `Diet` $=3$, and `Diet` $=4$.
 
 ### Example - Model Output Visualised
 \tiny
