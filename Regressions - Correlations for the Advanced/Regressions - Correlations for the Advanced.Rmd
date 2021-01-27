@@ -497,7 +497,7 @@ We keep all parameters. Although the inclusion of `Diet` is not significant, the
 \tiny
 ```{r MultiLin3, fig.height= 5}
 par(mfrow=c(2,2))
-plot(fitted(MultiLin_Mod), resid(MultiLin_Mod)) # values around 0 -> good
+plot(fitted(MultiLin_Mod), resid(MultiLin_Mod)) # values around 0 -> good, fanning out -> bad
 plot(fitted(MultiLin_Mod), ChickWeight$weight) # pattern fuzzy, but linear -> good
 qqnorm(resid(MultiLin_Mod)) # residuals are not normal dsitributed -> bad
 ```
