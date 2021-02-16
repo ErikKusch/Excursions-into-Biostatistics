@@ -1,0 +1,413 @@
+---
+title: "Troubleshooting R"
+subtitle: "Isolating Issues and Asking Questions"
+author: "Erik Kusch"
+date: "17/02/2021"
+fontsize: 10pt
+output: 
+  beamer_presentation: 
+    keep_tex: true # keep latex file that is generated during compilation
+    toc: false # this is added through a later command
+    slide_level: 3 # at how many pound signs (#) to assume slide title level
+    includes:
+      in_header: Style.tex
+classoption: c # change to `handout` to ignore breaks
+---
+  
+```{r setup, include=FALSE}
+options(scipen=1, digits=4)
+knitr::opts_chunk$set(echo = TRUE, message = FALSE, warning = FALSE, cache = TRUE, cache.lazy=TRUE, tidy.opts=list(width.cutoff=50),tidy=FALSE, fig.height=8, digits=4)
+```
+
+<!--- ####### TOC (use this if you want ## headers to be included in the toc)--------------------
+---------------------------------------  --->
+  
+\tableofcontents
+
+<!--- ####### DOCUMENT --------------------
+---------------------------------------  --->
+
+# Dealing with Problems
+## Problem-Sources
+### So your analysis is misbehaving...
+\vspace{-.2cm}
+\begin{tcolorbox}[colback=burgundy!5,colframe=burgundy!40!black,title=]
+\centering Start by \textbf{investigating common errror sources}:
+\end{tcolorbox}
+\vspace{-.2cm}
+
+\pause
+\begincols[T]
+  \begincol{.33\linewidth}
+    \begin{center}
+    \textbf{Code Errors}
+    \end{center}
+    \visible<3->{
+    \begin{itemize}
+    \item Capitalisation
+    \item Mismatched... 
+      \begin{itemize}
+      \item Object types
+      \item Value modes
+      \item Object dimensions
+      \end{itemize}
+    \item Directory structures
+    \item Non-self-contained scripts
+    \end{itemize}
+    }
+  \endcol
+  \begincol{.33\linewidth}
+    \begin{center}
+    \textbf{Mis-Specified Statistics}
+    \end{center}
+    \visible<4->{
+    \begin{itemize}
+    \item Assumptions not met
+    \item Erroneous outliers
+    \item Mis-interpretation of outputs
+    \item Incorrect data handling
+    \end{itemize}
+    }
+  \endcol
+  \begincol{.33\linewidth}
+    \begin{center}
+    \textbf{Unexpected Findings}
+    \visible<5->{
+    \textit{"[...] in an experimental framework, surprising results are significant results, rather than signs of failure."} \linebreak
+    $\sim$ Curtin \& Parker, 2014
+    }
+    \end{center}
+  \endcol
+\endcols
+\visible<6>{
+\begin{tcolorbox}[colback=green!5,colframe=green!40!black,title=]
+\centering How do we resolve these?
+\end{tcolorbox}
+}
+
+
+## Approaching Problems
+### Errors and Warnings
+\begincols[T]
+  \begincol{.5\linewidth}
+    `Error` \linebreak
+    `R`: "I can't and won't. You won't force me. I quit. I am done." \linebreak
+    \centering \includegraphics[width=.9\linewidth]{Figures/error.png}
+  \endcol
+  \begincol{.5\linewidth}
+    `Warning` \linebreak
+    `R`: "I can, but you might not like the output better look at that, my guy." \linebreak
+    \centering \includegraphics[width=.9\linewidth]{Figures/warning.png}
+  \endcol
+\endcols
+
+\vspace{.2cm}
+\raggedleft \tiny \url{http://rex-analytics.com/decoding-error-messages-r/}
+
+### Breaking problems down
+<!-- \textit{"If you're overwhelmed by the size of a problem, break it down into smaller pieces."} \linebreak -->
+<!-- \raggedleft $\sim$ Chuck Close -->
+- Investigate objects and their contents  
+- Read function help files (especially the arguments and values sections)  
+- Simulate data if in doubt  
+\hfill \linebreak
+\visible<2->{
+\centering \includegraphics[width=.75\linewidth]{Figures/eggs.jpg}
+\raggedleft \tiny Sousa et al., 2007 \normalsize
+}
+\visible<3->{
+\begin{tcolorbox}[colback=green!5,colframe=green!40!black,title=]
+\centering Your analyses hardly ever fail at all steps.
+\end{tcolorbox}
+}
+
+
+
+# Reproducibiliy
+## What & Why
+### What it is and why you need to care
+
+**Reproducibility** ensures:  
+
+- Honest and true reporting  
+- Results can be scrutinised  
+- Problems can be traced and identified  
+- Co-authors and reviewers get less annoyed  
+
+\vspace{.4cm}
+\begin{tcolorbox}[colback=green!5,colframe=green!40!black,title=]
+\textbf{Our Goal:} \linebreak
+\centering An analysis is \textbf{reproducible} when it can be executed by different researchers across operating systems with a \textbf{single button prompt} and return the same results for everyone.
+\end{tcolorbox}
+
+## How
+### Coding Styles
+- **Code**  
+    - *Consistency*  
+        - The same result on every execution.  
+        - The same naming scheme throughout.  
+    - *Self-contained* - Code runs in an empty `R` environment to completion.  
+
+\vspace{.4cm}    
+
+- **Documentation**  
+    - *Commenting* - Informative comments for:  
+        - What each line is doing/supposed to do.  
+        - Why each line is doing what it does/is supposed to do.  
+    - *Header* - Information of what the script does, and who authored it.  
+    - *File-Versioning* - GitHub or an equivalent to trace when a script broke.  
+
+### Packages
+
+\begin{tcolorbox}[colback=burgundy!5,colframe=burgundy!40!black,title=]
+\centering \textbf{Never include} forced \textbf{package installation} in a script.
+\end{tcolorbox}
+\vspace{.3cm}
+
+Instead, do something like this:
+\footnotesize
+```{r, eval = FALSE}
+install.load.package <- function(x) {
+  if (!require(x, character.only = TRUE))
+    install.packages(x, repos='http://cran.us.r-project.org')
+  require(x, character.only = TRUE)
+}
+package_vec <- c(
+  "rethinking", # for quadratic approximation of posteriors
+  "reshape2" # for data reformatting
+)
+sapply(package_vec, install.load.package)
+```
+
+### Working Directories
+\begin{tcolorbox}[colback=burgundy!5,colframe=burgundy!40!black,title=]
+\centering \textbf{Never} include \textbf{hard-coded} directory indexing.
+\end{tcolorbox}
+\only<1-6>{
+\begincols[T]
+  \begincol{.5\linewidth}
+    \only<1-6>{
+    \textbf{Make an Omlette out of Easter Eggs} \linebreak
+    \begin{enumerate}
+    \item Find the egg(s)/data
+    \item Open the egg(s)/data
+    \item Make the egg(s) into an omelette / do your analysis
+    \end{enumerate}
+    \pause
+    .... but... where are the eggs/the data?
+    }
+  \endcol
+  \begincol{.5\linewidth}
+    \only<3>{\centering \includegraphics[width=.9\linewidth]{Figures/C.png}}
+    \only<4>{\centering \includegraphics[width=.9\linewidth]{Figures/User.png}}
+    \only<5-6>{\centering \includegraphics[width=.9\linewidth]{Figures/Project.png}}
+  \endcol
+\endcols
+
+\vspace{.4cm}
+\visible<6>{
+\centering But what if you want to hunt for Easter Eggs/data somewhere other than the garden at Achmore/your specific project folder?
+}
+}
+
+\only<1-6>{\vspace{1cm}}
+\only<7>{\vspace{.1cm}}
+Soft-code your working directories from a base/project directory:
+\footnotesize
+```{r}
+Dir.Base <- getwd() # to find the project folder
+Dir.Data <- file.path(Dir.Base, "Data") # index the data folder
+```
+
+\normalsize
+
+Now we have our directories indexed without any hardcoding:
+
+\tiny
+```{r}
+Dir.Base
+Dir.Data
+```
+
+### Randomness
+\begin{tcolorbox}[colback=burgundy!5,colframe=burgundy!40!black,title=]
+\centering \textbf{Always} make \textbf{random processes reproducible}.
+\end{tcolorbox}
+\only<1-4>{
+\begincols[T]
+  \begincol{.65\linewidth}
+  \only<1-4>{
+  Imagine you survey the elevation of a random surface with paratroopers:
+    \begin{itemize}
+    \item Clouds obscure the landscape
+    \item All flights are on the same route
+    \item Troopers report elevation of their landing
+    \item There is no drift of paratroopers
+    \item Troopers jump at fixed intervals starting at a certain time after take-off
+    \end{itemize}
+  }
+  \endcol
+  \begincol{.35\linewidth}
+    \only<1>{\centering \includegraphics[width=1\linewidth]{Figures/Para1.jpg}}
+    \only<2-4>{\centering \includegraphics[width=1\linewidth]{Figures/Para2.jpg}}
+    \only<4>{
+$\rightarrow$ We let all flights commence their jump at the same time after take-off.
+}
+  \endcol
+\endcols
+
+\normalsize
+\vspace{.4cm}
+\visible<3-4>{
+$\rightarrow$ How can we get the same elevations from the troopers of two different flights?
+}
+}
+\only<1-4>{\vspace{1cm}}
+\only<5>{\vspace{.1cm}}
+\footnotesize
+```{r}
+rnorm(5, 1, 0.2)
+rnorm(5, 1, 0.2)
+set.seed(42); rnorm(5, 1, 0.2)
+set.seed(42); rnorm(5, 1, 0.2)
+```
+
+\begin{tcolorbox}[colback=green!5,colframe=green!40!black,title=]
+\centering A seed needs to be set before \textbf{every} random process.
+\end{tcolorbox}
+
+
+# Reporting Issues and Asking for Help
+## Minimal Working Examples
+### What is a Minimal Working Example (MWE)?  
+
+\begin{tcolorbox}[colback=green!5,colframe=green!40!black,title=]
+\centering A reproducible, simplified version of code producing a desired outcome.
+\end{tcolorbox}
+
+- **Minimal**. Information and code is reduced as much as possible. This involves reducing:   
+    - Lines of `R` code  
+    - Number of `R` packages needed  
+    - Reliance on directory structures  
+    - Description of work, result, aim, and potential error  
+- **Complete**. All information, data, and code necessary to execute the MWE is presented.    
+- **Reproducible**. The MWE returns the same output on all operating systems when executed by any person. Ideally, this happens at the push of a single button.  
+
+
+## Minimality
+### Minimal Description
+
+**The Goal:** *I want to use a k-means clustering approach to identify biome classes across Alaska during the year 1982 using GIMMs NDVI 3g annual mean and seasonality values.*
+
+\vspace{.3cm}
+
+**Method(s) & Material(s):**  
+- *Data:*  
+    - GIMMs NDVI 3g (9x9km index of vegetation performance)  
+    - Natural Vector Shapefiles (shapefile-collection of states and provinces)  
+- *Method:*  
+    - K-Means-Clustering implemented via the `mclust` package
+
+\vspace{.3cm}
+    
+**The Problem:**  Call to `mclustBIC()` produces the following error:  
+
+`Error in mvnXII(data = data, prior = prior) : NA/NaN/Inf in foreign function call (arg 1)`
+
+### Minimal Data - Before Reducing to MWE
+
+**The Data on our end** before handing it off:  
+\begincols[T]
+  \begincol{.5\linewidth}
+  \centering \includegraphics[width=1\linewidth]{Figures/DataFull.JPG}
+  \endcol
+  \begincol{.5\linewidth}
+  \centering \includegraphics[width=1\linewidth]{Figures/DataFullHDD.JPG}
+  \endcol
+\endcols
+
+\vspace{.3cm}
+
+Data needs to be **reduced** to the important parts (`All1982_ras`, in this case). We can export an `R` environment with the `save.image()` function.
+
+\vspace{.3cm}
+
+**The Data for the MWE** that we hand over:  
+\begincols[T]
+  \begincol{.5\linewidth}
+  \centering \includegraphics[width=1\linewidth]{Figures/DataSparse.JPG}
+  \endcol
+  \begincol{.5\linewidth}
+  \centering \includegraphics[width=1\linewidth]{Figures/DataSparseHDD.JPG}
+  \endcol
+\endcols
+
+
+
+### Minimal Code
+
+\begincols[T]
+  \begincol{.5\linewidth}
+  \textbf{Original Script:}
+  \centering \includegraphics[width=1\linewidth]{Figures/ErrorScript.JPG}
+  \endcol
+  \begincol{.5\linewidth}
+  \textbf{MWE Script:}
+  \centering \includegraphics[width=1\linewidth]{Figures/MWEScript.JPG}
+  \vspace{.3cm}
+  We removed code for:
+  \begin{itemize}
+  \item Download of data
+  \item Cropping and masking of data
+  \item Calculation of compound metrics
+  \end{itemize}
+  \endcol
+\endcols
+
+## Completeness
+### Complete Reporting
+
+\begincols[T]
+  \begincol{.5\linewidth}
+  We also supply:
+  \begin{itemize}
+  \item Archive of our raw data directory
+  \item Script which contains all the code we removed from full script when creating MWE script
+  \end{itemize}
+  \vspace{.3cm}
+We may also want to provide:  
+- `sessionInfo()`  
+- `rstudioapi::versionInfo()`  
+- Metadata if needed  
+  \endcol
+  \begincol{.5\linewidth}
+  \textbf{MWE Script:}
+  \centering \includegraphics[width=1\linewidth]{Figures/SupplementScript.JPG}
+  \endcol
+\endcols
+
+## Reproducibility
+### Reproducible Issues  
+
+\begincols[T]
+  \begincol{.5\linewidth}
+We test our MWE script:  
+- In a new, empty directory by sourcing the script  
+- For completeness by running it on an empty `R` environment and by adding `rm(list=ls())` to the start of the script  
+
+\vspace{.3cm}
+
+Our script still produces the same error?  
+
+$\rightarrow$ We ship it off to someone whom we hope can help us.
+  \endcol
+  \begincol{.5\linewidth}
+  \centering \includegraphics[width=1\linewidth]{Figures/908.jpg}
+  \tiny \raggedleft \url{https://knowyourmeme.com/photos/1297214-impossible-perhaps-the-archives-are-incomplete}
+  \endcol
+\endcols
+
+
+
+
+
